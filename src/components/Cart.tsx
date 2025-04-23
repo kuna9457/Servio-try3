@@ -1,9 +1,11 @@
 'use client';
 
 import { useCart } from '../context/CartContext';
+import { useState } from 'react';
 
 const Cart = () => {
-  const { items, removeFromCart, totalAmount, isCartOpen, setIsCartOpen } = useCart();
+  const { items, removeFromCart, getTotal } = useCart();
+  const [isCartOpen, setIsCartOpen] = useState(true);
 
   if (!isCartOpen) return null;
 
@@ -34,17 +36,17 @@ const Cart = () => {
                 {items.map((item) => (
                   <div key={item.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                     <img
-                      src={item.image}
-                      alt={item.category}
+                      src={item.service.image}
+                      alt={item.service.category}
                       className="w-20 h-20 object-cover rounded-lg"
                     />
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900">Professional {item.category}</h3>
-                      <p className="text-gray-600 text-sm">Provider: {item.provider}</p>
-                      <p className="text-primary font-semibold">${item.price}/hr</p>
+                      <h3 className="font-semibold text-gray-900">Professional {item.service.category}</h3>
+                      <p className="text-gray-600 text-sm">Provider: {item.service.provider}</p>
+                      <p className="text-primary font-semibold">₹{item.service.price}/hr</p>
                     </div>
                     <button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeFromCart(item.service._id)}
                       className="text-red-500 hover:text-red-700"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,7 +61,7 @@ const Cart = () => {
               <div className="border-t pt-4">
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-lg font-semibold text-gray-900">Total Amount:</span>
-                  <span className="text-2xl font-bold text-primary">${totalAmount}</span>
+                  <span className="text-2xl font-bold text-primary">₹{getTotal()}</span>
                 </div>
                 <button
                   onClick={() => {

@@ -13,6 +13,7 @@ interface AuthFormData {
   password: string;
   confirmPassword?: string;
   role?: 'user' | 'provider';
+  phone?: string;
 }
 
 export default function Auth() {
@@ -25,6 +26,7 @@ export default function Auth() {
     password: '',
     confirmPassword: '',
     role: 'user',
+    phone: '',
   });
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -68,6 +70,7 @@ export default function Auth() {
           email: formData.email,
           password: formData.password,
           role: formData.role!,
+          phone: formData.phone!,
         });
         const { user, token } = response.data;
         login(user, token);
@@ -181,6 +184,24 @@ export default function Auth() {
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
                   placeholder="John Doe"
                   value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
+            )}
+
+            {!isLogin && (
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                  Phone Number
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  required
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                  placeholder="+1234567890"
+                  value={formData.phone}
                   onChange={handleChange}
                 />
               </div>

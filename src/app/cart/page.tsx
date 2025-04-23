@@ -9,19 +9,14 @@ import Image from 'next/image';
 interface Service {
   _id: string;
   category: string;
-  provider: {
-    _id: string;
-    name: string;
-    location: string;
-  };
+  provider: string;
   price: number;
   image: string;
   description: string;
-  type: string;
-  cuisine: string;
 }
 
 interface CartItem {
+  id: string;
   service: Service;
   quantity: number;
 }
@@ -97,14 +92,11 @@ const CartPage = () => {
                 <div className="flex-1">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="font-medium text-gray-900">{item.service.type}</h3>
+                      <h3 className="font-medium text-gray-900">{item.service.description}</h3>
                       <p className="text-sm text-gray-500">{item.service.category}</p>
                       <div className="mt-1 space-y-1">
                         <p className="text-sm text-gray-600">
-                          <span className="font-medium">Provider:</span> {item.service.provider?.name || 'N/A'}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          <span className="font-medium">Cuisine:</span> {item.service.cuisine || 'N/A'}
+                          <span className="font-medium">Provider:</span> {item.service.provider || 'N/A'}
                         </p>
                       </div>
                     </div>

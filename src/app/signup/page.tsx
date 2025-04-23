@@ -12,6 +12,7 @@ interface SignupFormData {
   password: string;
   confirmPassword: string;
   role: 'user' | 'provider';
+  phone: string;
 }
 
 export default function Signup() {
@@ -23,6 +24,7 @@ export default function Signup() {
     password: '',
     confirmPassword: '',
     role: 'user',
+    phone: '',
   });
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,6 +53,7 @@ export default function Signup() {
         email: formData.email,
         password: formData.password,
         role: formData.role,
+        phone: formData.phone,
       });
       const { user, token } = response.data;
       login(user, token);
@@ -159,6 +162,21 @@ export default function Signup() {
                 <option value="user">User</option>
                 <option value="provider">Service Provider</option>
               </select>
+            </div>
+            <div>
+              <label htmlFor="phone" className="sr-only">
+                Phone Number
+              </label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                placeholder="Phone Number"
+                value={formData.phone}
+                onChange={handleChange}
+              />
             </div>
           </div>
 

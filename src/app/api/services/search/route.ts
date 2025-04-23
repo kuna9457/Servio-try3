@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     // Filter services based on search query and location
     const filteredServices = allServices.filter(service => {
       const matchesQuery = query
-        ? service.name.toLowerCase().includes(query.toLowerCase()) ||
+        ? service.title.toLowerCase().includes(query.toLowerCase()) ||
           service.description.toLowerCase().includes(query.toLowerCase()) ||
           service.category.toLowerCase().includes(query.toLowerCase())
         : true;

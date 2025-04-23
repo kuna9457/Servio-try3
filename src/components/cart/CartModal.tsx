@@ -2,7 +2,7 @@ import { useCart } from '@/context/CartContext';
 import { useRouteProtection } from '@/context/RouteProtectionContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -15,8 +15,6 @@ const CartModal = ({ isOpen, onClose }: CartModalProps) => {
   const router = useRouter();
 
   if (!isOpen) return null;
-
-  const total = items.reduce((sum, item) => sum + item.price, 0);
 
   const handleProceedToCheckout = () => {
     setRouteValid(true);
@@ -55,19 +53,19 @@ const CartModal = ({ isOpen, onClose }: CartModalProps) => {
                 <div key={item.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
                   <div className="relative w-20 h-20">
                     <Image
-                      src={item.image.replace('/Frontend', '')}
-                      alt={item.category}
+                      src={item.service.image.replace('/Frontend', '')}
+                      alt={item.service.category}
                       fill
                       className="object-cover rounded-md"
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{item.category}</h3>
-                    <p className="text-sm text-gray-500">{item.provider}</p>
-                    <p className="text-primary font-semibold">₹{item.price}</p>
+                    <h3 className="font-medium text-gray-900">{item.service.category}</h3>
+                    <p className="text-sm text-gray-500">{item.service.provider}</p>
+                    <p className="text-primary font-semibold">₹{item.service.price}</p>
                   </div>
                   <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => removeFromCart(item.service._id)}
                     className="text-red-500 hover:text-red-700"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -27,14 +27,14 @@ interface PaymentRequest {
 }
 
 interface CartItem {
+  id: string;
   service: {
     _id: string;
     category: string;
+    provider: string;
     price: number;
     image: string;
-    provider: {
-      name: string;
-    };
+    description: string;
   };
   quantity: number;
 }
@@ -525,7 +525,7 @@ const PaymentPage = () => {
                           </div>
                           <div className="flex-1">
                             <h3 className="font-medium text-gray-900">{item.service.category}</h3>
-                            <p className="text-sm text-gray-500">{item.service.provider.name}</p>
+                            <p className="text-sm text-gray-500">{item.service.provider}</p>
                             <div className="flex items-center justify-between mt-1">
                               <span className="text-[#003B95] font-medium">₹{item.service.price.toFixed(2)}</span>
                               <div className="flex items-center gap-2">

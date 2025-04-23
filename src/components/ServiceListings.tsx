@@ -427,8 +427,19 @@ const ServiceListings = () => {
 
   const displayedServices = finalFilteredServices.slice(0, displayCount);
 
+  const transformServiceForCart = (service: Service) => {
+    return {
+      _id: service._id,
+      category: service.category,
+      provider: service.provider.name,
+      price: service.price,
+      image: service.image,
+      description: service.description,
+    };
+  };
+
   const handleAddToCart = (service: Service) => {
-    addToCart(service);
+    addToCart(transformServiceForCart(service));
   };
 
   const handleRemoveFromCart = (serviceId: string) => {

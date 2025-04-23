@@ -77,6 +77,17 @@ const features = [
   }
 ];
 
+const transformServiceForCart = (service: Service) => {
+  return {
+    _id: service._id,
+    category: service.category,
+    provider: service.provider.name,
+    price: service.price,
+    image: service.image,
+    description: service.description,
+  };
+};
+
 export default function WhatWeDo() {
   const { addToCart, getCartCount, removeFromCart, updateQuantity } = useCart();
   const [services, setServices] = useState<Service[]>([]);
@@ -105,7 +116,7 @@ export default function WhatWeDo() {
   const displayedServices = services.slice(0, displayCount);
 
   const handleAddToCart = (service: Service) => {
-    addToCart(service);
+    addToCart(transformServiceForCart(service));
   };
 
   const handleRemoveFromCart = (serviceId: string) => {
