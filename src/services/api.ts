@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://servio-server.onrender.com/api';
+const API_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://servio-server.onrender.com/api'
+  : 'http://localhost:5000/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -8,6 +10,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true
 });
 
 // Add token to requests if it exists
