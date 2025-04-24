@@ -6,9 +6,7 @@ const locations = [
   'Airoli',
   'Kopar khairane',
   'Rabale',
-  'Kharghar',
   'Vashi',
-  'Mahape',
 ];
 
 const LocationSelector = () => {

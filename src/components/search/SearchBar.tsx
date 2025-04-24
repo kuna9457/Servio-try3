@@ -2,13 +2,9 @@ import { useState, useEffect } from 'react';
 
 const placeholders = [
   'Search services...',
-  'Need a home cleaning?',
-  'Need a plumber?',
-  'Need a cook?',
-  'Find carpenters near you',
-  'Looking for painters?',
-  'Search for gardeners',
-  'Need a handyman?'
+  'Need a Non-Veg?',
+  'Need a Veg?',
+  
 ];
 
 interface SearchBarProps {

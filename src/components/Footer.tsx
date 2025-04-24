@@ -129,21 +129,21 @@ const Footer = () => {
             <ul className="space-y-2">
               <li className="text-gray-400">
                 <span className="block">Email:</span>
-                <a href="mailto:support@servicehub.com" className="hover:text-white transition-colors">
-                  support@servicehub.com
-                </a>
+                {/* <a href="mailto:support@servicehub.com" className="hover:text-white transition-colors"> */}
+                  KunalKumar9457.kk@gmail.com
+                {/* </a> */}
               </li>
-              <li className="text-gray-400">
+              {/* <li className="text-gray-400">
                 <span className="block">Phone:</span>
                 <a href="tel:+1234567890" className="hover:text-white transition-colors">
                   (123) 456-7890
                 </a>
-              </li>
-              <li className="text-gray-400">
+              </li> */}
+              {/* <li className="text-gray-400">
                 <span className="block">Address:</span>
                 <span>123 Service Street</span>
                 <span>New York, NY 10001</span>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
