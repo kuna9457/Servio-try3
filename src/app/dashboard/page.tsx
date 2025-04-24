@@ -56,7 +56,7 @@ export default function DashboardPage() {
           return;
         }
 
-        const response = await fetch(`/api/bookings/my-bookings`, {
+        const response = await fetch(`https://servio-server.onrender.com/api/bookings/my-bookings`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -92,7 +92,7 @@ export default function DashboardPage() {
         return;
       }
 
-      const response = await fetch(`/api/bookings/${bookingId}/cancel`, {
+      const response = await fetch(`https://servio-server.onrender.com/api/bookings/${bookingId}/cancel`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -172,7 +172,7 @@ export default function DashboardPage() {
       }
 
       const response = await axios.post(
-        `http://localhost:5000/api/bookings/${bookingId}/reschedule`,
+        `https://servio-server.onrender.com/api/bookings/${bookingId}/reschedule`,
         { scheduledDate: scheduledDateTime.toISOString() },
         {
           headers: {

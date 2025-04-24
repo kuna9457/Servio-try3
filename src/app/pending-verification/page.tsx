@@ -68,7 +68,7 @@ const PendingVerificationPage = () => {
         try {
           const emailHtml = render(<OrderConfirmationEmail orderDetails={parsedDetails} />);
           
-          await fetch('http://localhost:3001/api/send-email', {
+          await fetch('https://servio-server.onrender.com/api/send-email', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

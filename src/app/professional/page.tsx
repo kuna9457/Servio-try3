@@ -68,7 +68,7 @@ export default function ProfessionalRegistrationPage() {
       }
 
       // Register the professional
-      const response = await fetch('http://localhost:5000/api/professionals/register', {
+      const response = await fetch('https://servio-server.onrender.com/api/professionals/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

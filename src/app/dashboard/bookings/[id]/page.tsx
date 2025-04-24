@@ -44,7 +44,7 @@ export default function BookingDetailsPage({ params }: { params: { id: string } 
           return;
         }
 
-        const response = await fetch(`http://localhost:5000/api/booking/${params.id}`, {
+        const response = await fetch(`https://servio-server.onrender.com/api/booking/${params.id}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',

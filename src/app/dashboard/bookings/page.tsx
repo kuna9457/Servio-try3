@@ -23,7 +23,7 @@ export default function Bookings() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/bookings', {
+        const response = await fetch('https://servio-server.onrender.com/api/bookings', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },

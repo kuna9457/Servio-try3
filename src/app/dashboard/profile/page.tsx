@@ -75,15 +75,13 @@ export default function ProfileSettings() {
     setMessage(null);
 
     try {
-      const response = await axios.put(
-        'http://localhost:5000/api/users/profile',
-        profileData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      const response = await fetch('https://servio-server.onrender.com/api/users/profile', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(profileData),
+      });
 
       if (response.status === 200) {
         setMessage({
@@ -127,15 +125,13 @@ export default function ProfileSettings() {
         throw new Error('Authentication token not found. Please log in again.');
       }
 
-      const response = await axios.post(
-        'http://localhost:5000/api/users/initiate-password-change',
-        { email: user.email },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch('https://servio-server.onrender.com/api/users/initiate-password-change', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email: user.email }),
+      });
 
       if (response.status === 200) {
         setMessage({
@@ -174,15 +170,13 @@ export default function ProfileSettings() {
     setMessage(null);
 
     try {
-      const response = await axios.post(
-        'http://localhost:5000/api/users/verify-code',
-        { code: verificationCode },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      const response = await fetch('https://servio-server.onrender.com/api/users/verify-code', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ code: verificationCode }),
+      });
 
       if (response.status === 200) {
         setMessage({
@@ -212,19 +206,17 @@ export default function ProfileSettings() {
         throw new Error('New passwords do not match');
       }
 
-      const response = await axios.post(
-        'http://localhost:5000/api/users/change-password',
-        {
+      const response = await fetch('https://servio-server.onrender.com/api/users/change-password', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
           currentPassword: passwordData.currentPassword,
           newPassword: passwordData.newPassword,
           verificationCode,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+        }),
+      });
 
       if (response.status === 200) {
         setMessage({
