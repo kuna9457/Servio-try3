@@ -107,7 +107,7 @@ const Footer = () => {
                     isActive('/help-center/cancellation') ? 'text-white' : ''
                   }`}
                 >
-                  Cancellation Options
+                  Rescheduling Options
                 </Link>
               </li>
               <li>

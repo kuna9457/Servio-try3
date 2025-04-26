@@ -25,8 +25,8 @@ const faqs: FAQItem[] = [
     answer: "We offer multiple payment options including online payment (UPI, cards, net banking) and pay-later options. You can choose the most convenient method during checkout."
   },
   {
-    question: "Can I cancel or reschedule a booking?",
-    answer: "Yes, you can cancel or reschedule your booking through your account dashboard. Please check our cancellation policy for specific terms and conditions."
+    question: "Can I reschedule a booking?",
+    answer: "Yes, you can reschedule your booking through your account dashboard. Please check our rescheduling policy for specific terms and conditions."
   },
   {
     question: "How do I become a professional on Servio?",

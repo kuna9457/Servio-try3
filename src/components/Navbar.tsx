@@ -142,8 +142,8 @@ const Navbar = () => {
               <Image
                 src="/logo.png"
                 alt="Logo"
-                width={80}
-                height={80}
+                width={90}
+                height={90}
                 className="rounded-full transition-transform duration-300 group-hover:scale-105"
               />
             </Link>
@@ -151,6 +151,19 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
+          <Link 
+              href="/dashboard" 
+              className={`relative text-sm font-medium px-2 py-1 transition-all duration-300 ${
+                isActive('/dashboard') 
+                  ? 'text-[#003B95]' 
+                  : 'text-gray-600 hover:text-[#003B95]'
+              }`}
+            >
+              Dashboard
+              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-[#003B95] transform transition-all duration-300 ${
+                isActive('/dashboard') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+              }`} />
+            </Link>
             <Link 
               href="/services" 
               className={`relative text-sm font-medium px-2 py-1 transition-all duration-300 ${

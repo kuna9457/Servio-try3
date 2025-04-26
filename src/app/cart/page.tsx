@@ -92,7 +92,7 @@ const CartPage = () => {
                 <div className="flex-1">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="font-medium text-gray-900">{item.service.description}</h3>
+                      <h3 className="font-medium text-gray-900">{item.service._id}</h3>
                       <p className="text-sm text-gray-500">{item.service.category}</p>
                       <div className="mt-1 space-y-1">
                         <p className="text-sm text-gray-600">
