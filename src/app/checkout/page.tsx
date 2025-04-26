@@ -4,7 +4,7 @@ import { useCart } from '@/context/CartContext';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import { format, addDays, isAfter, setHours, setMinutes } from 'date-fns';
+import { format, addDays, isAfter, setHours, setMinutes, addHours } from 'date-fns';
 
 const CheckoutPage = () => {
   const { items, getTotal, clearCart } = useCart();
@@ -22,12 +22,12 @@ const CheckoutPage = () => {
     scheduledTime: ''
   });
 
-  // Calculate minimum date (24 hours from now)
-  const minDate = format(addDays(new Date(), 1), 'yyyy-MM-dd');
+  // Calculate minimum date (12 hours from now)
+  const minDate = format(addHours(new Date(), 12), 'yyyy-MM-dd');
   
   // Generate time slots (8 AM to 9 PM)
   const timeSlots = Array.from({ length: 14 }, (_, i) => {
-    const hour = i + 8; // 8 AM to 9 PM
+    const hour = i + 9; // 8 AM to 9 PM
     return format(setHours(setMinutes(new Date(), 0), hour), 'HH:mm');
   });
 
@@ -76,10 +76,10 @@ const CheckoutPage = () => {
       // Combine date and time
       const scheduledDateTime = new Date(`${formData.scheduledDate}T${formData.scheduledTime}`);
       const now = new Date();
-      const minDateTime = addDays(now, 1);
+      const minDateTime = addHours(now, 12);
 
       if (!isAfter(scheduledDateTime, minDateTime)) {
-        throw new Error('Service must be booked at least 24 hours in advance');
+        throw new Error('Service must be booked at least 12 hours in advance');
       }
 
       // Save customer details to localStorage
@@ -293,7 +293,7 @@ const CheckoutPage = () => {
                           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                         />
                         <p className="text-xs text-gray-500 mt-1">
-                          Service must be booked at least 24 hours in advance
+                          Service must be booked at least 12 hours in advance
                         </p>
                       </div>
 

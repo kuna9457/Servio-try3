@@ -113,7 +113,7 @@ const PayLaterPage = () => {
                   <p className="text-sm text-gray-600 mb-4">
                     Save this QR code for making the payment after service completion
                   </p>
-                  {orderDetails.upiLink && (
+                  {/* {orderDetails.upiLink && (
                     <a
                       href={orderDetails.upiLink}
                       target="_blank"
@@ -125,12 +125,12 @@ const PayLaterPage = () => {
                       </svg>
                       Open in UPI App
                     </a>
-                  )}
+                  )} */}
                 </div>
               </div>
 
               {/* Due Date */}
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Due Date</h3>
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="flex items-center gap-3">
@@ -147,7 +147,7 @@ const PayLaterPage = () => {
                     </span>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Order Items */}
               <div className="mb-6">

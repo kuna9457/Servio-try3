@@ -22,7 +22,6 @@ interface PaymentRequest {
   amount: number;
   qrCode: string;
   upiLink: string;
-  dueDate?: string;
   paymentMethod: string;
 }
 
@@ -39,7 +38,7 @@ interface CartItem {
   quantity: number;
 }
 
-type PaymentMethodType = 'qr' | 'pay_later' | 'card' | 'upi';
+type PaymentMethodType = 'qr' | 'pay_later';
 
 const paymentMethods: PaymentMethod[] = [
   { id: 'qr', name: 'QR Code Payment', icon: '📲' },
@@ -181,7 +180,7 @@ const PaymentPage = () => {
         paymentMethod: 'qr'
       };
 
-      // Send confirmation emails
+      // Send confirmation email from frontend
       try {
         const emailHtml = render(
           <OrderConfirmationEmail orderDetails={orderDetails} />
@@ -196,8 +195,19 @@ const PaymentPage = () => {
           body: JSON.stringify({
             customerEmail: localStorage.getItem('userEmail'),
             customerName: localStorage.getItem('userName'),
-            subject: `Order Confirmation - ${paymentRequest.transactionId}`,
-            html: emailHtml
+            subject: `New Booking-${paymentRequest.transactionId}`,
+            orderDetails: {
+              orderId: paymentRequest.transactionId,
+              scheduledDate: new Date().toISOString(),
+              status: 'pending',
+              services: items.map(item => ({
+                name: item.service.category,
+                quantity: item.quantity,
+                price: item.service.price
+              })),
+              amount: paymentRequest.amount,
+              paymentMethod: 'qr'
+            }
           })
         });
 
@@ -243,7 +253,6 @@ const PaymentPage = () => {
         body: JSON.stringify({
           amount: getTotal() * 1.1,
           paymentMethod: 'pay_later',
-          dueDate: dueDate,
           cartItems: items.map(item => ({
             name: item.service.category,
             quantity: item.quantity,
@@ -262,6 +271,30 @@ const PaymentPage = () => {
         throw new Error(data.error || 'Unknown error occurred');
       }
 
+      // Verify the payment
+      const verifyResponse = await fetch('/api/payments/verify-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          transactionId: data.data.transactionId,
+          cartItems: items,
+          paymentMethod: 'pay_later'
+        }),
+      });
+
+      if (!verifyResponse.ok) {
+        const errorData = await verifyResponse.json();
+        throw new Error(errorData.error || 'Failed to verify payment');
+      }
+
+      const verifyData = await verifyResponse.json();
+      if (!verifyData.success) {
+        throw new Error(verifyData.error);
+      }
+
       // Store order details for the confirmation page
       const orderDetails = {
         transactionId: data.data.transactionId,
@@ -275,15 +308,13 @@ const PaymentPage = () => {
         subtotal: getTotal(),
         tax: getTotal() * 0.1,
         total: getTotal() * 1.1,
-        dueDate: data.data.dueDate,
+        paymentMethod: 'pay_later',
         qrCode: data.data.qrCode,
-        upiLink: data.data.upiLink,
-        paymentMethod: 'pay_later'
+        upiLink: data.data.upiLink
       };
 
-      // Send confirmation emails with enhanced error handling
+      // Send confirmation email from frontend
       try {
-        console.log('Sending confirmation email for pay later order...');
         const emailHtml = render(
           <OrderConfirmationEmail orderDetails={orderDetails} />
         );
@@ -297,21 +328,27 @@ const PaymentPage = () => {
           body: JSON.stringify({
             customerEmail: localStorage.getItem('userEmail'),
             customerName: localStorage.getItem('userName'),
-            subject: `Order Confirmation - ${data.data.transactionId}`,
-            html: emailHtml
+            subject: `New Booking-${data.data.transactionId}`,
+            orderDetails: {
+              orderId: data.data.transactionId,
+              scheduledDate: new Date().toISOString(),
+              status: 'pending',
+              services: items.map(item => ({
+                name: item.service.category,
+                quantity: item.quantity,
+                price: item.service.price
+              })),
+              amount: data.data.amount,
+              paymentMethod: 'pay_later'
+            }
           })
         });
 
         if (!emailResponse.ok) {
-          const emailErrorData = await emailResponse.text();
-          console.error('Failed to send confirmation email:', emailErrorData);
-          throw new Error('Failed to send confirmation email');
+          console.error('Failed to send confirmation email:', await emailResponse.text());
         }
-
-        console.log('Confirmation email sent successfully');
       } catch (emailError) {
-        console.error('Error in email sending process:', emailError);
-        // Continue with the order process even if email fails
+        console.error('Error sending confirmation email:', emailError);
       }
 
       localStorage.setItem('orderDetails', JSON.stringify(orderDetails));
@@ -334,7 +371,7 @@ const PaymentPage = () => {
   const handleContinueToPayment = () => {
     if (selectedMethod === 'pay_later') {
       handlePayLater();
-    } else {
+    } else if (selectedMethod === 'qr') {
       handleGenerateQRCode();
     }
   };
@@ -342,35 +379,7 @@ const PaymentPage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
-    if (selectedMethod === 'card') {
-      handleCardPayment();
-    } else if (selectedMethod === 'upi') {
-      handleUPIPayment();
-    }
-  };
-
-  const handleCardPayment = async () => {
-    // Implement card payment logic
-    setIsLoading(true);
-    try {
-      // Add your card payment implementation here
-    } catch (error) {
-      setErrors({ general: 'Failed to process card payment' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleUPIPayment = async () => {
-    // Implement UPI payment logic
-    setIsLoading(true);
-    try {
-      // Add your UPI payment implementation here
-    } catch (error) {
-      setErrors({ general: 'Failed to process UPI payment' });
-    } finally {
-      setIsLoading(false);
-    }
+    handleContinueToPayment();
   };
 
   const handleUpdateQuantity = (serviceId: string, newQuantity: number) => {
@@ -426,23 +435,6 @@ const PaymentPage = () => {
           paymentMethod: 'qr'
         };
 
-        // Generate email content
-        const emailHtml = render(<OrderConfirmationEmail orderDetails={orderDetails} />);
-
-        // Send confirmation email
-        await fetch('/api/send-email', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({
-            to: paymentRequest.customerEmail,
-            subject: 'Order Confirmation',
-            html: emailHtml
-          })
-        });
-
         localStorage.setItem('orderDetails', JSON.stringify(orderDetails));
         router.push('/pending-verification');
       } else if (selectedMethod === 'pay_later') {
@@ -455,28 +447,8 @@ const PaymentPage = () => {
           subtotal: getTotal(),
           tax: getTotal() * 0.1,
           total: getTotal() * 1.1,
-          dueDate: data.data.dueDate,
-          qrCode: data.data.qrCode,
-          upiLink: data.data.upiLink,
           paymentMethod: 'pay_later'
         };
-
-        // Generate email content
-        const emailHtml = render(<OrderConfirmationEmail orderDetails={orderDetails} />);
-
-        // Send confirmation email
-        await fetch('/api/send-email', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({
-            to: paymentRequest.customerEmail,
-            subject: 'Order Confirmation - Pay Later',
-            html: emailHtml
-          })
-        });
 
         localStorage.setItem('orderDetails', JSON.stringify(orderDetails));
         router.push('/pay-later');
@@ -640,21 +612,9 @@ const PaymentPage = () => {
                       {selectedMethod === 'pay_later' && (
                         <div className="p-6 border border-gray-200 rounded-lg">
                           <h3 className="text-lg font-medium text-gray-900 mb-4">Pay Later</h3>
-                          {/* <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Select Due Date
-                            </label>
-                            <input
-                              type="date"
-                              value={dueDate}
-                              onChange={(e) => setDueDate(e.target.value)}
-                              min={new Date().toISOString().split('T')[0]}
-                              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#003B95] focus:border-transparent"
-                            />
-                          </div> */}
                           <button
                             onClick={handlePayLater}
-                            disabled={isLoading || !dueDate}
+                            disabled={isLoading}
                             className="w-full py-2.5 px-4 bg-[#003B95] text-white rounded-lg hover:bg-[#002F77] transition-colors disabled:bg-gray-400"
                           >
                             {isLoading ? 'Processing...' : 'Confirm Pay Later'}

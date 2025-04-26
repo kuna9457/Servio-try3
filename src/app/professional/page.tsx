@@ -67,13 +67,42 @@ export default function ProfessionalRegistrationPage() {
         throw new Error('Please select at least one service category');
       }
 
-      // Register the professional
+      // Generate HTML email body in the frontend
+      const htmlBody = `
+        <table style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #f0f0f0;">
+          <tr>
+            <td style="background: #003B95; color: #fff; padding: 24px 0; text-align: center; border-radius: 8px 8px 0 0;">
+              <h1 style="margin: 0; font-size: 28px;">New Professional Registration</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 32px 24px 24px 24px;">
+              <p style="font-size: 16px; margin-bottom: 16px;">A new professional has registered on Servio:</p>
+              <table style="width: 100%; background: #f8f9fa; border-radius: 6px; padding: 16px; margin-bottom: 24px;">
+                <tr><td style="padding: 8px 0;"><b>Name:</b></td><td>${formData.name}</td></tr>
+                <tr><td style="padding: 8px 0;"><b>Email:</b></td><td>${formData.email}</td></tr>
+                <tr><td style="padding: 8px 0;"><b>Phone:</b></td><td>${formData.phone}</td></tr>
+                <tr><td style="padding: 8px 0;"><b>Services:</b></td><td>${formData.serviceCategories.join(', ')}</td></tr>
+                <tr><td style="padding: 8px 0;"><b>Location:</b></td><td>${formData.location}</td></tr>
+                <tr><td style="padding: 8px 0;"><b>Per Person Rate:</b></td><td>₹${formData.perPersonRate}</td></tr>
+                <tr><td style="padding: 8px 0;"><b>Availability:</b></td><td>${formData.availability}</td></tr>
+                <tr><td style="padding: 8px 0;"><b>Description:</b></td><td>${formData.description}</td></tr>
+              </table>
+              <div style="margin-top: 24px;">
+                <span style="display: inline-block; background: #003B95; color: #fff; padding: 12px 24px; border-radius: 4px; font-weight: bold;">Review Application in Admin Dashboard</span>
+              </div>
+            </td>
+          </tr>
+        </table>
+      `;
+
+      // Register the professional and send HTML body
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/professionals/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, htmlBody }),
       });
 
       const data = await response.json();

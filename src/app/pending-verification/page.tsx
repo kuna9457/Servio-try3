@@ -62,30 +62,6 @@ const PendingVerificationPage = () => {
     if (storedOrderDetails) {
       const parsedDetails = JSON.parse(storedOrderDetails);
       setOrderDetails(parsedDetails);
-
-      // Send confirmation email
-      const sendConfirmationEmail = async () => {
-        try {
-          const emailHtml = render(<OrderConfirmationEmail orderDetails={parsedDetails} />);
-          
-          await fetch('https://servio-server.onrender.com/api/send-email', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify({
-              to: localStorage.getItem('userEmail'),
-              subject: 'Order Confirmation',
-              html: emailHtml
-            })
-          });
-        } catch (error) {
-          console.error('Failed to send confirmation email:', error);
-        }
-      };
-
-      sendConfirmationEmail();
     }
     setIsLoading(false);
 
