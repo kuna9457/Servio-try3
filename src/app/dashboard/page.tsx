@@ -43,7 +43,7 @@ export default function DashboardPage() {
   const timeSlots = [
     '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'
   ];
-
+  
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -55,8 +55,8 @@ export default function DashboardPage() {
           router.push('/login');
           return;
         }
-
-        const response = await fetch(`https://servio-server.onrender.com/api/bookings/my-bookings`, {
+        const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+        const response = await fetch(`${backendUrl}/api/bookings/my-bookings`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -92,7 +92,7 @@ export default function DashboardPage() {
         return;
       }
 
-      const response = await fetch(`https://servio-server.onrender.com/api/bookings/${bookingId}/cancel`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${bookingId}/cancel`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -172,7 +172,7 @@ export default function DashboardPage() {
       }
 
       const response = await axios.post(
-        `https://servio-server.onrender.com/api/bookings/${bookingId}/reschedule`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${bookingId}/reschedule`,
         { scheduledDate: scheduledDateTime.toISOString() },
         {
           headers: {

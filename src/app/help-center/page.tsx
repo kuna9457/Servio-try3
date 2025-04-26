@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FaQuestionCircle, FaShieldAlt, FaUserCog, FaTimesCircle, FaHeadset } from 'react-icons/fa';
+import { FaQuestionCircle, FaShieldAlt, FaUserCog, FaTimesCircle, FaHeadset, FaCalendarTimes, FaCalendar } from 'react-icons/fa';
 
 const helpSections = [
   {
@@ -30,12 +30,12 @@ const helpSections = [
     iconColor: 'text-purple-500',
   },
   {
-    title: 'Cancellation Policy',
-    description: 'Understand our cancellation and refund policies for different services.',
-    icon: FaTimesCircle,
-    href: '/help-center/cancellation',
-    color: 'bg-red-50',
-    iconColor: 'text-red-500',
+    title: 'Rescheduling Policy',
+    description: 'Understand our rescheduling policies for different services.',
+    icon: FaCalendar ,
+    href: '/help-center/rescheduling',
+    color: 'bg-cyan-50',
+    iconColor: 'text-cyan-500',
   },
   {
     title: 'Service Guarantee',

@@ -25,7 +25,7 @@ export async function POST(
     }
 
     const response = await axios.post(
-      `http://localhost:5000/api/bookings/${id}/reschedule`,
+      `${process.env.NEXT_PUBLIC_API_URL}/bookings/${id}/reschedule`,
       { scheduledDate },
       {
         headers: {

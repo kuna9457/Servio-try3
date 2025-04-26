@@ -142,7 +142,7 @@ const ServiceListings = () => {
               availability: true,
               image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
               provider: {
-                _id: 'provider-tiffin-2',
+                _id: 'Gourmet Delights',
                 name: 'Gourmet Delights',
                 location: selectedLocation
               },
@@ -153,7 +153,7 @@ const ServiceListings = () => {
             },
             {
               _id: 'tiffin-2',
-              title: 'Monthly Veg Thali Subscriptions',
+              title: 'Veg Tiffin',
               description: 'Daily fresh vegetarian meals including roti, sabzi, dal, rice, and salad. Customizable menu options available.',
               category: 'Tiffin Services',
               price: 80,
@@ -161,7 +161,7 @@ const ServiceListings = () => {
               availability: true,
               image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
               provider: {
-                _id: 'provider-tiffin-1',
+                _id: 'Taste of Home',
                 name: 'Taste of Home',
                 location: selectedLocation
               },
@@ -172,7 +172,7 @@ const ServiceListings = () => {
             },
             {
               _id: 'tiffin-3',
-              title: 'Premium Non-Veg Thali',
+              title: 'Non-Veg Tiffin',
               description: 'High-quality non-vegetarian meals with chicken/egg curry, rice, roti, and accompaniments. Weekly menu rotation.',
               category: 'Tiffin Services',
               price: 100,
@@ -180,7 +180,7 @@ const ServiceListings = () => {
               availability: true,
               image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
               provider: {
-                _id: 'provider-tiffin-2',
+                _id: 'Gourmet Delights',
                 name: 'Gourmet Delights',
                 location: selectedLocation
               },
@@ -199,7 +199,7 @@ const ServiceListings = () => {
               availability: true,
               image: 'https://images.unsplash.com/photo-1585937421612-70a0083564be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
               provider: {
-                _id: 'provider-tiffin-3',
+                _id: 'Spice of India',
                 name: 'Spice of India',
                 location: selectedLocation
               },
@@ -218,7 +218,7 @@ const ServiceListings = () => {
               availability: true,
               image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
               provider: {
-                _id: 'provider-tiffin-4',
+                _id: 'Little Bites',
                 name: 'Little Bites',
                 location: selectedLocation
               },
@@ -403,14 +403,14 @@ const ServiceListings = () => {
     
     // Map each tiffin category to specific services
     const tiffinMapping: {[key: string]: string[]} = {
-      'tiffin1': ['Customize Meal','Veg Thali', 'Monthly Veg Thali'], // Punjabi Patiala
-      'tiffin2': ['Veg Thali', 'Monthly Veg Thali','Customize Meal'], // Rotli Rasoi
-      'tiffin3': ['Non-Veg Thali', 'Premium Non-Veg','Customize Meal'], // Ghar Ka Bhojan
-      'tiffin4': ['Veg Thali', 'Monthly Veg Thali','Customize Meal'], // Bhog Bhoj
+      'tiffin1': ['Customize Meal','Veg Tiffin', 'Non-Veg Tiffin'], // Punjabi Patiala
+      'tiffin2': ['Veg Tiffin', 'Customize Meal'], // Rotli Rasoi
+      'tiffin3': ['Non-Veg Tiffin', 'Customize Meal'], // Ghar Ka Bhojan
+      'tiffin4': ['Veg Tiffin', 'Monthly Veg Thali','Customize Meal'], // Bhog Bhoj
       'tiffin5': ['Customize Meal'], // Desi Dabba
-      'tiffin6': ['Non-Veg Thali', 'Premium Non-Veg','Customize Meal'], // Tandoori Tiffins
-      'tiffin7': ['Customize Meal'], // Food Station
-      'tiffin8': ['Veg Thali', 'Monthly Veg Thali','Customize Meal'] // Maharastrian rasoi
+      'tiffin6': ['Non-Veg Tiffin', 'Non-Veg Tiffin','Customize Meal'], // Tandoori Tiffins
+      'tiffin7': ['Customize Meal','Ayurvedic Meals'], // Food Station
+      'tiffin8': ['Veg Tiffin','Customize Meal','Non-Veg Tiffin'] // Maharastrian rasoi
     };
     
     // Check if the service title contains any of the mapped tiffin names

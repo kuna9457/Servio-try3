@@ -16,6 +16,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose, o
   const { getCartCount, removeFromCart, updateQuantity } = useCart();
   const count = getCartCount(service._id);
   const [customQuantities, setCustomQuantities] = useState<{ [key: string]: number }>({
+    'Sabzi': 1,
     'Roti': 3,
     'Dal': 250,
     'Rice': 300,
@@ -60,6 +61,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose, o
         return `${quantity}g`;
       case 'Pickles':
         return `${quantity}g (2 types)`;
+      case 'Sabzi':
       default:
         return `${quantity}`;
     }
@@ -103,28 +105,28 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose, o
   // Tiffin service menu data
   const tiffinMenu = {
     veg: [
-      { name: 'Roti', quantity: '3 pieces (150g each)', price: 30 },
-      { name: 'Dal', quantity: '250g', price: 40 },
-      { name: 'Rice', quantity: '300g', price: 30 },
-      { name: 'Pickles', quantity: '50g (2 types)', price: 10 },
-      { name: 'Papad', quantity: '1 piece (20g)', price: 10 },
-      { name: 'Salad', quantity: '200g', price: 20 }
+      { name: 'Roti', quantity: '3 pieces (150g each)', price: 30, sabzi: 1 },
+      { name: 'Dal', quantity: '250g', price: 40, sabzi: 1 },
+      { name: 'Rice', quantity: '300g', price: 30, sabzi: 1 },
+      { name: 'Pickles', quantity: '50g (2 types)', price: 10, sabzi: 1 },
+      { name: 'Papad', quantity: '1 piece (20g)', price: 10, sabzi: 1 },
+      { name: 'Salad', quantity: '200g', price: 20, sabzi: 1 }
     ],
     nonVeg: [
-      { name: 'Roti', quantity: '3 pieces', price: 30 },
-      { name: 'Chicken Curry', quantity: '1 bowl', price: 80 },
-      { name: 'Rice', quantity: '1 bowl', price: 30 },
-      { name: 'Pickles', quantity: '2 types', price: 10 },
-      { name: 'Papad', quantity: '1 piece', price: 10 },
-      { name: 'Salad', quantity: '1 bowl', price: 20 }
+      { name: 'Roti', quantity: '3 pieces', price: 30, sabzi: 1 },
+      { name: 'Chicken Curry', quantity: '1 bowl', price: 80, sabzi: 1 },
+      { name: 'Rice', quantity: '1 bowl', price: 30, sabzi: 1 },
+      { name: 'Pickles', quantity: '2 types', price: 10, sabzi: 1 },
+      { name: 'Papad', quantity: '1 piece', price: 10, sabzi: 1 },
+      { name: 'Salad', quantity: '1 bowl', price: 20, sabzi: 1 }
     ],
     egg: [
-      { name: 'Roti', quantity: '3 pieces', price: 30 },
-      { name: 'Egg Curry', quantity: '1 bowl', price: 60 },
-      { name: 'Rice', quantity: '1 bowl', price: 30 },
-      { name: 'Pickles', quantity: '2 types', price: 10 },
-      { name: 'Papad', quantity: '1 piece', price: 10 },
-      { name: 'Salad', quantity: '1 bowl', price: 20 }
+      { name: 'Roti', quantity: '3 pieces', price: 30, sabzi: 1 },
+      { name: 'Egg Curry', quantity: '1 bowl', price: 60, sabzi: 1 },
+      { name: 'Rice', quantity: '1 bowl', price: 30, sabzi: 1 },
+      { name: 'Pickles', quantity: '2 types', price: 10, sabzi: 1 },
+      { name: 'Papad', quantity: '1 piece', price: 10, sabzi: 1 },
+      { name: 'Salad', quantity: '1 bowl', price: 20, sabzi: 1 }
     ]
   };
 
@@ -199,15 +201,16 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose, o
       style={{ marginTop: '64px' }} // Add margin from navbar
       onClick={handleOverlayClick}
     >
+      
       <div className="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 relative my-8 max-h-[calc(100vh-128px)] overflow-y-auto">
         {/* Close button */}
-        <button
+        {/* <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-500 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition-all"
+          className="absolute top-4 -right-1 text-gray-400 hover:text-gray-500 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition-all"
           aria-label="Close modal"
         >
           <FiX className="w-6 h-6" />
-        </button>
+        </button> */}
 
         <div className="relative h-64 w-full mb-8">
           <img
@@ -313,13 +316,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose, o
             </div>
           )}
 
-          <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-            <div>
-              <span className="text-sm text-gray-500">Price</span>
-              <span className="block text-3xl font-bold text-[#003B95]">${service.price}</span>
-            </div>
-            {renderCartButton()}
-          </div>
+          
         </div>
       </div>
     </div>
