@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     // Forward the request to the backend server
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
     
-    const response = await fetch(`${backendUrl}/payments/create-qr-payment`, {
+    const response = await fetch(`${backendUrl}/api/payments/create-qr-payment`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
