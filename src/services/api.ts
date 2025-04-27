@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://servio-server.onrender.com/api'
-  : 'http://localhost:5000/api';
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api`
 
 // Create axios instance with default config
 const api = axios.create({
