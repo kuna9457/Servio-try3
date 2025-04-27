@@ -8,7 +8,7 @@ export async function GET(request: Request) {
 
   try {
     // Fetch all services from your backend
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/services`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/services`);
     if (!response.ok) {
       throw new Error('Failed to fetch services');
     }
