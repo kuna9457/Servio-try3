@@ -75,22 +75,32 @@ export default function ProfileSettings() {
     setMessage(null);
 
     try {
-      const response = await fetch('https://servio-server.onrender.com/api/users/profile', {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/profile`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(profileData),
       });
 
-      if (response.status === 200) {
-        setMessage({
-          type: 'success',
-          text: 'Profile updated successfully',
-        });
-        setOriginalData(profileData);
-        setIsEditing(false);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to update profile');
       }
+
+      setMessage({
+        type: 'success',
+        text: 'Profile updated successfully',
+      });
+      setOriginalData(profileData);
+      setIsEditing(false);
     } catch (error) {
       setMessage({
         type: 'error',
