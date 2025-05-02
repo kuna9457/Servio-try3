@@ -79,6 +79,7 @@ const PaymentPage = () => {
       return;
     }
   }, [isRouteValid, router]);
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const handleGenerateQRCode = async () => {
     try {
@@ -86,7 +87,7 @@ const PaymentPage = () => {
       setErrors({});
 
       // Create payment order with QR code
-      const response = await fetch('/api/payments/create-qr-payment', {
+      const response = await fetch(`${backendUrl}/api/payments/create-qr-payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +143,7 @@ const PaymentPage = () => {
     setErrors({});
     
     try {
-      const response = await fetch('/api/payments/verify-payment', {
+      const response = await fetch(`${backendUrl}/api/payments/verify-payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -242,9 +243,9 @@ const PaymentPage = () => {
     try {
       setIsLoading(true);
       setErrors({});
-
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
       // Create payment order for pay later
-      const response = await fetch('/api/payments/create-order', {
+      const response = await fetch(`${backendUrl}/api/payments/create-order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -272,7 +273,7 @@ const PaymentPage = () => {
       }
 
       // Verify the payment
-      const verifyResponse = await fetch('/api/payments/verify-payment', {
+      const verifyResponse = await fetch(`${backendUrl}/api/payments/verify-payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -407,7 +408,7 @@ const PaymentPage = () => {
         transactionId: `TXN-${Date.now()}` // Generate a unique transaction ID
       };
 
-      const response = await fetch('/api/payment', {
+      const response = await fetch(`${backendUrl}/api/payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

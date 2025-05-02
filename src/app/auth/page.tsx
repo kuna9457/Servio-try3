@@ -92,7 +92,7 @@ export default function Auth() {
       });
       const { user, token } = response.data;
       login(user, token);
-      router.push('/dashboard');
+      router.push('/');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error with Google authentication');
       console.error('Google auth error:', err);
@@ -108,7 +108,7 @@ export default function Auth() {
           <div className="flex justify-center">
             <Image
               src="/logo.png"
-              alt="ServiceHub Logo"
+              alt="Servio Logo"
               width={64}
               height={64}
               className="rounded-full"
