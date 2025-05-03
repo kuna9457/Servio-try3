@@ -11,7 +11,6 @@ interface ProfessionalFormData {
   description: string;
   location: string;
   availability: string;
-  perPersonRate: string;
 }
 
 const serviceCategories = [
@@ -30,7 +29,6 @@ export default function ProfessionalRegistrationPage() {
     description: '',
     location: '',
     availability: '',
-    perPersonRate: '',
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -84,7 +82,7 @@ export default function ProfessionalRegistrationPage() {
                 <tr><td style="padding: 8px 0;"><b>Phone:</b></td><td>${formData.phone}</td></tr>
                 <tr><td style="padding: 8px 0;"><b>Services:</b></td><td>${formData.serviceCategories.join(', ')}</td></tr>
                 <tr><td style="padding: 8px 0;"><b>Location:</b></td><td>${formData.location}</td></tr>
-                <tr><td style="padding: 8px 0;"><b>Per Person Rate:</b></td><td>₹${formData.perPersonRate}</td></tr>
+                
                 <tr><td style="padding: 8px 0;"><b>Availability:</b></td><td>${formData.availability}</td></tr>
                 <tr><td style="padding: 8px 0;"><b>Description:</b></td><td>${formData.description}</td></tr>
               </table>
@@ -122,7 +120,6 @@ export default function ProfessionalRegistrationPage() {
           description: '',
           location: '',
           availability: '',
-          perPersonRate: '',
         });
       } else {
         throw new Error(data.message || 'Failed to register. Please try again.');
@@ -256,7 +253,7 @@ export default function ProfessionalRegistrationPage() {
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Per Person Rate (₹) *
                   </label>
@@ -269,7 +266,7 @@ export default function ProfessionalRegistrationPage() {
                     min="0"
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="mb-4">

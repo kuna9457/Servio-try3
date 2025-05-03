@@ -145,12 +145,11 @@ export const bookingAPI = {
 export const Professional = {
   registerProfessional: (data: {
     name: string;
-    email: string
+    email: string;
     phone: string;
     location: string;
     serviceCategories: string[];
     description: string;
     availability: string;
-    perPersonRate: string;
   }) => api.post('/professionals/register', data),
 };
