@@ -107,7 +107,7 @@ export default function ReschedulingOptions() {
             <div className="bg-gray-100 text-black p-6 rounded-lg">
               <h3 className="text-xl font-semibold mb-2">Contact Support</h3>
               {/* <p className="text-lg">Phone: (555) 123-4567</p> */}
-              <p className="text-lg">Email: kunalkumar9457.kk@gmail.com</p>
+              <p className="text-lg">Email: servioease@gmail.com</p>
               {/* <p className="text-lg">Hours: 24/7 Support Available</p> */}
             </div>
           </section>

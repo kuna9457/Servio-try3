@@ -130,7 +130,8 @@ const Footer = () => {
               <li className="text-gray-400">
                 <span className="block">Email:</span>
                 {/* <a href="mailto:support@servicehub.com" className="hover:text-white transition-colors"> */}
-                  KunalKumar9457.kk@gmail.com
+                servioease@gmail.com
+
                 {/* </a> */}
               </li>
               {/* <li className="text-gray-400">
