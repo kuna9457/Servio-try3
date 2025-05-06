@@ -182,9 +182,9 @@ const PaymentPage = () => {
 
       // Send confirmation email from frontend
       try {
-        const emailHtml = render(
-          <OrderConfirmationEmail orderDetails={orderDetails} />
-        );
+        // const emailHtml = render(
+        //   <OrderConfirmationEmail orderDetails={orderDetails} />
+        // );
 
         const emailResponse = await fetch('/api/email/send', {
           method: 'POST',
@@ -314,9 +314,9 @@ const PaymentPage = () => {
 
       // Send confirmation email from frontend
       try {
-        const emailHtml = render(
-          <OrderConfirmationEmail orderDetails={orderDetails} />
-        );
+        // const emailHtml = render(
+        //   <OrderConfirmationEmail orderDetails={orderDetails} />
+        // );
 
         const emailResponse = await fetch('/api/email/send', {
           method: 'POST',
