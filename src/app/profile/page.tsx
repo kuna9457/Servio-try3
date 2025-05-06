@@ -8,6 +8,17 @@ import { User } from '@/services/api';
 import { toast } from 'react-hot-toast';
 import { FiEdit2, FiSave, FiX, FiLock, FiMail, FiPhone, FiMapPin, FiHome, FiMap, FiUser } from 'react-icons/fi';
 
+interface ProfileFormData {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  pincode: string;
+  alternatePhone: string;
+}
+
 export default function ProfilePage() {
   const router = useRouter();
   const { user, logout } = useUser();
@@ -16,16 +27,28 @@ export default function ProfilePage() {
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState<Partial<User>>({
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [formData, setFormData] = useState<ProfileFormData>({
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: user?.phone || '',
+    address: user?.address || '',
+    city: user?.city || '',
+    state: user?.state || '',
+    pincode: user?.pincode || '',
+    alternatePhone: user?.alternatePhone || ''
+  });
+  const [originalData, setOriginalData] = useState<ProfileFormData>({
     name: '',
     email: '',
     phone: '',
     address: '',
     city: '',
     state: '',
-    zipCode: ''
+    pincode: '',
+    alternatePhone: ''
   });
-  const [originalData, setOriginalData] = useState<Partial<User>>({});
   const [passwordData, setPasswordData] = useState({
     newPassword: '',
     confirmPassword: ''
@@ -43,7 +66,7 @@ export default function ProfilePage() {
     const savedProfile = localStorage.getItem('profileData');
     if (savedProfile) {
       const parsedProfile = JSON.parse(savedProfile);
-      setProfileData(parsedProfile);
+      setFormData(parsedProfile);
       setOriginalData(parsedProfile);
     } else {
       const userData = {
@@ -53,16 +76,20 @@ export default function ProfilePage() {
         address: user.address || '',
         city: user.city || '',
         state: user.state || '',
-        zipCode: user.zipCode || ''
+        pincode: user.pincode || '',
+        alternatePhone: user.alternatePhone || ''
       };
-      setProfileData(userData);
+      setFormData(userData);
       setOriginalData(userData);
     }
   }, [user, router]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setProfileData((prev: Partial<User>) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,24 +99,25 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user?.email) return;
-
     setIsLoading(true);
+    setError(null);
+    setSuccess(null);
+
     try {
-      await authAPI.updateProfile(profileData);
-      localStorage.setItem('profileData', JSON.stringify(profileData));
-      setOriginalData(profileData);
+      const response = await authAPI.updateProfile(formData);
+      localStorage.setItem('profileData', JSON.stringify(formData));
+      setOriginalData(formData);
+      setSuccess('Profile updated successfully!');
       setIsEditing(false);
-      toast.success('Profile updated successfully!');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to update profile');
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to update profile');
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleCancelEdit = () => {
-    setProfileData(originalData);
+    setFormData(originalData);
     setIsEditing(false);
   };
 
@@ -221,6 +249,18 @@ export default function ProfilePage() {
               )}
             </div>
 
+            {error && (
+              <div className="bg-red-50 text-red-500 p-4 rounded-lg mb-6">
+                {error}
+              </div>
+            )}
+            
+            {success && (
+              <div className="bg-green-50 text-green-500 p-4 rounded-lg mb-6">
+                {success}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
@@ -232,7 +272,7 @@ export default function ProfilePage() {
                     <input
                       type="text"
                       name="name"
-                      value={profileData.name}
+                      value={formData.name}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:bg-gray-100 disabled:text-gray-500"
@@ -247,7 +287,7 @@ export default function ProfilePage() {
                     <input
                       type="email"
                       name="email"
-                      value={profileData.email}
+                      value={formData.email}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:bg-gray-100 disabled:text-gray-500"
@@ -262,7 +302,21 @@ export default function ProfilePage() {
                     <input
                       type="tel"
                       name="phone"
-                      value={profileData.phone}
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:bg-gray-100 disabled:text-gray-500"
+                    />
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                      <FiPhone className="mr-2" />
+                      Alternate Phone
+                    </label>
+                    <input
+                      type="tel"
+                      name="alternatePhone"
+                      value={formData.alternatePhone}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:bg-gray-100 disabled:text-gray-500"
@@ -278,7 +332,7 @@ export default function ProfilePage() {
                     <input
                       type="text"
                       name="address"
-                      value={profileData.address}
+                      value={formData.address}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:bg-gray-100 disabled:text-gray-500"
@@ -293,7 +347,7 @@ export default function ProfilePage() {
                       <input
                         type="text"
                         name="city"
-                        value={profileData.city}
+                        value={formData.city}
                         onChange={handleInputChange}
                         disabled={!isEditing}
                         className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:bg-gray-100 disabled:text-gray-500"
@@ -307,7 +361,7 @@ export default function ProfilePage() {
                       <input
                         type="text"
                         name="state"
-                        value={profileData.state}
+                        value={formData.state}
                         onChange={handleInputChange}
                         disabled={!isEditing}
                         className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:bg-gray-100 disabled:text-gray-500"
@@ -317,12 +371,12 @@ export default function ProfilePage() {
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
                       <FiMapPin className="mr-2" />
-                      ZIP Code
+                      Pincode
                     </label>
                     <input
                       type="text"
-                      name="zipCode"
-                      value={profileData.zipCode}
+                      name="pincode"
+                      value={formData.pincode}
                       onChange={handleInputChange}
                       disabled={!isEditing}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:bg-gray-100 disabled:text-gray-500"

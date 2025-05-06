@@ -176,18 +176,8 @@ const PayLaterPage = () => {
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium">₹{orderDetails.subtotal.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Tax (10%)</span>
-                    <span className="font-medium">₹{orderDetails.tax.toFixed(2)}</span>
-                  </div>
-                  <div className="border-t border-gray-200 pt-2">
-                    <div className="flex justify-between font-semibold">
-                      <span>Total</span>
-                      <span className="text-[#003B95]">₹{orderDetails.total.toFixed(2)}</span>
-                    </div>
+                    <span className="text-gray-600">Total</span>
+                    <span className="font-medium">₹{orderDetails.total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

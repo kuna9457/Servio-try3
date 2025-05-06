@@ -94,7 +94,7 @@ const PaymentPage = () => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
-          amount: getTotal() * 1.1,
+          amount: getTotal() ,
           currency: 'INR',
           cartItems: items.map(item => ({
             name: item.service.category,
@@ -176,8 +176,7 @@ const PaymentPage = () => {
           price: item.service.price
         })),
         subtotal: getTotal(),
-        tax: getTotal() * 0.1,
-        total: getTotal() * 1.1,
+        total: getTotal(),
         paymentMethod: 'qr'
       };
 
@@ -252,7 +251,7 @@ const PaymentPage = () => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
-          amount: getTotal() * 1.1,
+          amount: getTotal(),
           paymentMethod: 'pay_later',
           cartItems: items.map(item => ({
             name: item.service.category,
@@ -307,8 +306,7 @@ const PaymentPage = () => {
           price: item.service.price
         })),
         subtotal: getTotal(),
-        tax: getTotal() * 0.1,
-        total: getTotal() * 1.1,
+        total: getTotal(),
         paymentMethod: 'pay_later',
         qrCode: data.data.qrCode,
         upiLink: data.data.upiLink
@@ -355,15 +353,9 @@ const PaymentPage = () => {
       localStorage.setItem('orderDetails', JSON.stringify(orderDetails));
       clearCart();
       router.push('/pay-later');
-
-      // After successful pay later setup
-      completePayment();
-
     } catch (error: any) {
       console.error('Error processing pay later:', error);
-      setErrors({
-        general: `Failed to process pay later request: ${error.message}`
-      });
+      setErrors({ general: error.message || 'Failed to process pay later request' });
     } finally {
       setIsLoading(false);
     }
@@ -395,7 +387,7 @@ const PaymentPage = () => {
       setErrors({});
 
       const paymentRequest = {
-        amount: getTotal() * 1.1, // Include 10% tax
+        amount: getTotal(),
         currency: 'INR',
         items: items.map(item => ({
           name: item.service.category,
@@ -431,8 +423,7 @@ const PaymentPage = () => {
           amount: paymentRequest.amount,
           items: paymentRequest.items,
           subtotal: getTotal(),
-          tax: getTotal() * 0.1,
-          total: getTotal() * 1.1,
+          total: getTotal(),
           paymentMethod: 'qr'
         };
 
@@ -446,8 +437,7 @@ const PaymentPage = () => {
           amount: data.data.amount,
           items: paymentRequest.items,
           subtotal: getTotal(),
-          tax: getTotal() * 0.1,
-          total: getTotal() * 1.1,
+          total: getTotal(),
           paymentMethod: 'pay_later'
         };
 
@@ -513,16 +503,8 @@ const PaymentPage = () => {
                     {/* Order Details */}
                     <div className="space-y-3 mb-6">
                       <div className="flex justify-between">
-                        <span>Subtotal</span>
-                        <span className="font-medium">₹{getTotal().toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Tax (10%)</span>
-                        <span className="font-medium">₹{(getTotal() * 0.1).toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between font-bold text-lg">
                         <span>Total</span>
-                        <span className="text-[#003B95]">₹{(getTotal() * 1.1).toFixed(2)}</span>
+                        <span className="font-medium">₹{getTotal().toFixed(2)}</span>
                       </div>
                     </div>
 
@@ -535,9 +517,9 @@ const PaymentPage = () => {
                           <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                           </svg>
-                          <a href="mailto:support@tiffinwala.com" className="text-sm text-[#003B95] hover:text-[#002F77] font-medium">
-                            support@tiffinwala.com
-                          </a>
+                          <div  className="text-sm text-[#003B95] hover:text-[#002F77] font-medium">
+                            servioease@gmail.com
+                          </div>
                         </div>
                       </div>
                     </div>

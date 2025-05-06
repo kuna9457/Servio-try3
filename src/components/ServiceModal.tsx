@@ -105,93 +105,54 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose, o
   // Tiffin service menu data
   const tiffinMenu = {
     veg: [
-      { name: 'Roti', quantity: '3 pieces (150g each)', price: 30, sabzi: 1 },
-      { name: 'Dal', quantity: '250g', price: 40, sabzi: 1 },
-      { name: 'Rice', quantity: '300g', price: 30, sabzi: 1 },
-      { name: 'Pickles', quantity: '50g (2 types)', price: 10, sabzi: 1 },
-      { name: 'Papad', quantity: '1 piece (20g)', price: 10, sabzi: 1 },
-      { name: 'Salad', quantity: '200g', price: 20, sabzi: 1 }
+      { name: 'Roti', item: '3 pieces', price: 30, sabzi: 1 },
+      { name: 'Dal', item: '1 bowl', price: 40, sabzi: 1 },
+      { name: 'Rice', item: '1 bowl', price: 30, sabzi: 1 },
+      { name: 'Pickles', item: '2 types', price: 10, sabzi: 1 },
     ],
     nonVeg: [
-      { name: 'Roti', quantity: '3 pieces', price: 30, sabzi: 1 },
-      { name: 'Chicken Curry', quantity: '1 bowl', price: 80, sabzi: 1 },
-      { name: 'Rice', quantity: '1 bowl', price: 30, sabzi: 1 },
-      { name: 'Pickles', quantity: '2 types', price: 10, sabzi: 1 },
-      { name: 'Papad', quantity: '1 piece', price: 10, sabzi: 1 },
-      { name: 'Salad', quantity: '1 bowl', price: 20, sabzi: 1 }
+      { name: 'Roti', item: '3 pieces', price: 30, sabzi: 1 },
+      { name: 'Chicken Curry', item: '1 bowl', price: 80, sabzi: 1 },
+      { name: 'Rice', item: '1 bowl', price: 30, sabzi: 1 },
+      { name: 'Pickles', item: '2 types', price: 10, sabzi: 1 },
     ],
-    egg: [
-      { name: 'Roti', quantity: '3 pieces', price: 30, sabzi: 1 },
-      { name: 'Egg Curry', quantity: '1 bowl', price: 60, sabzi: 1 },
-      { name: 'Rice', quantity: '1 bowl', price: 30, sabzi: 1 },
-      { name: 'Pickles', quantity: '2 types', price: 10, sabzi: 1 },
-      { name: 'Papad', quantity: '1 piece', price: 10, sabzi: 1 },
-      { name: 'Salad', quantity: '1 bowl', price: 20, sabzi: 1 }
+    roti: [
+      { name: 'Roti', item: '1 piece', price: 10, sabzi: 0 }
     ]
   };
 
   // Check if this is a tiffin service
   const isTiffinService = service.category === 'Tiffin Services';
 
-  const includedServices = {
-    'House Cleaning': [
-      'Dusting and wiping surfaces',
-      'Vacuuming and mopping floors',
-      'Bathroom cleaning',
-      'Kitchen cleaning',
-      'Making beds'
-    ],
-    'Plumbing': [
-      'Pipe repair and replacement',
-      'Fixture installation',
-      'Drain cleaning',
-      'Leak detection',
-      'Water heater services'
-    ],
-    // Add more for other categories...
+  // Determine which menu to show based on service title
+  const getMenuToShow = () => {
+    if (service.title.toLowerCase().includes('non-veg')) {
+      return tiffinMenu.nonVeg;
+    } else if (service.title.toLowerCase().includes('roti') || service.title.toLowerCase().includes('chapati')) {
+      return tiffinMenu.roti;
+    } else {
+      return tiffinMenu.veg;
+    }
   };
 
-  const excludedServices = {
-    'House Cleaning': [
-      'Window washing',
-      'Carpet deep cleaning',
-      'Wall washing',
-      'Furniture moving',
-      'Outdoor cleaning'
-    ],
-    'Plumbing': [
-      'Gas line installation',
-      'Major renovations',
-      'Septic system work',
-      'Water main installation',
-      'Sprinkler system repair'
-    ],
-    // Add more for other categories...
-  };
+  // const includedServices = {
+  //   'House Cleaning': [
+  //     'Dusting and wiping surfaces',
+  //     'Vacuuming and mopping floors',
+  //     'Bathroom cleaning',
+  //     'Kitchen cleaning',
+  //     'Making beds'
+  //   ],
+  //   'Plumbing': [
+  //     'Pipe repair and replacement',
+  //     'Fixture installation',
+  //     'Drain cleaning',
+  //     'Leak detection',
+  //     'Water heater services'
+  //   ],
+  //   // Add more for other categories...
+  // };
 
-  const procedures = {
-    'House Cleaning': [
-      'Initial assessment of cleaning needs',
-      'Preparation of cleaning supplies and equipment',
-      'Systematic cleaning from top to bottom',
-      'Special attention to high-traffic areas',
-      'Final inspection and touch-ups'
-    ],
-    'Plumbing': [
-      'Initial diagnostic inspection',
-      'Problem identification and quote provision',
-      'Required repairs or installations',
-      'Testing and quality assurance',
-      'Clean-up and final inspection'
-    ],
-    // Add more for other categories...
-  };
-
-  const descriptions = {
-    'House Cleaning': 'Professional house cleaning services tailored to your needs. Our experienced cleaners use high-quality products and follow systematic procedures to ensure your home is spotless and sanitized.',
-    'Plumbing': 'Expert plumbing services for all your residential and commercial needs. Our licensed plumbers provide reliable solutions for repairs, installations, and maintenance.',
-    // Add more for other categories...
-  };
 
   const isCustomizableMeal = service.title === 'Customize Meal';
 
@@ -255,16 +216,16 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose, o
             <div className="border-t border-gray-200 pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Menu</h3>
               
-              {/* Veg Items */}
+              {/* Menu Items */}
               <div className="mb-6">
                 <h4 className="text-md font-medium text-green-600 mb-2 flex items-center">
                   <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  {service.title === 'Customize Meal' ? 'Customize Your Meal' : 'Vegetarian Items'}
+                  {service.title === 'Customize Meal' ? 'Customize Your Meal' : 'Menu Items'}
                 </h4>
                 <div className="grid grid-cols-1 gap-2">
-                  {tiffinMenu.veg.map((item, index) => (
+                  {getMenuToShow().map((item, index) => (
                     <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded-md">
                       <div className="flex-1">
                         <span className="text-gray-700 font-medium">{item.name}</span>
@@ -293,7 +254,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose, o
                             </div>
                           </div>
                         ) : (
-                          <span className="text-gray-500 text-sm ml-2">({item.quantity})</span>
+                          <span className="text-gray-500 text-sm ml-2">({item.item})</span>
                         )}
                       </div>
                     </div>

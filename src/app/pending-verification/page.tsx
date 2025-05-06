@@ -247,16 +247,8 @@ const PendingVerificationPage = () => {
                   {/* Order Totals */}
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Subtotal</span>
-                      <span className="font-medium">₹{orderDetails.subtotal.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Tax (10%)</span>
-                      <span className="font-medium">₹{orderDetails.tax.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-lg font-semibold">
-                      <span>Total Amount</span>
-                      <span className="text-[#003B95]">₹{orderDetails.total.toFixed(2)}</span>
+                      <span className="text-gray-600">Total Amount</span>
+                      <span className="font-medium">₹{orderDetails.total.toFixed(2)}</span>
                     </div>
                   </div>
 

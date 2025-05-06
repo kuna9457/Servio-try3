@@ -108,22 +108,6 @@ const OrderConfirmationEmail: React.FC<OrderConfirmationEmailProps> = ({ orderDe
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
-            marginBottom: '8px'
-          }}>
-            <span>Subtotal</span>
-            <span>${orderDetails.subtotal.toFixed(2)}</span>
-          </div>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: '8px'
-          }}>
-            <span>Tax (10%)</span>
-            <span>${orderDetails.tax.toFixed(2)}</span>
-          </div>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
             fontWeight: 'bold',
             fontSize: '18px',
             color: '#003B95'

@@ -29,7 +29,8 @@ export interface User {
   address?: string;
   city?: string;
   state?: string;
-  zipCode?: string;
+  pincode?: string;
+  alternatePhone?: string;
   role: 'user' | 'provider';
 }
 
@@ -76,7 +77,11 @@ export const authAPI = {
     email?: string;
     phone?: string;
     address?: string;
-  }) => api.put('/auth/profile', data),
+    city?: string;
+    state?: string;
+    pincode?: string;
+    alternatePhone?: string;
+  }) => api.put('/users/profile', data),
 
   googleAuth: (data: { credential: string }) => api.post('/auth/google', data),
 

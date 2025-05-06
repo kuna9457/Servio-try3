@@ -92,8 +92,8 @@ const CartPage = () => {
                 <div className="flex-1">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="font-medium text-gray-900">{item.service._id}</h3>
-                      <p className="text-sm text-gray-500">{item.service.category}</p>
+                      <h3 className="font-medium text-gray-900">{item.service.category}</h3>
+                      <p className="text-sm text-gray-500">{item.service.description}</p>
                       <div className="mt-1 space-y-1">
                         <p className="text-sm text-gray-600">
                           <span className="font-medium">Provider:</span> {item.service.provider || 'N/A'}
@@ -132,18 +132,8 @@ const CartPage = () => {
           <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
           <div className="space-y-4 mb-6">
             <div className="flex justify-between text-base">
-              <span className="text-gray-600">Subtotal</span>
+              <span className="text-gray-600">Total</span>
               <span className="font-medium">₹{getTotal().toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-base">
-              <span className="text-gray-600">Tax (10%)</span>
-              <span className="font-medium">₹{(getTotal() * 0.1).toFixed(2)}</span>
-            </div>
-            <div className="border-t pt-4">
-              <div className="flex justify-between text-lg font-semibold">
-                <span>Total</span>
-                <span>₹{(getTotal() * 1.1).toFixed(2)}</span>
-              </div>
             </div>
           </div>
           <button

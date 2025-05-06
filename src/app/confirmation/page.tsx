@@ -102,15 +102,7 @@ const ConfirmationPage = () => {
               
               <div className="mt-4 pt-4 border-t space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span>₹{orderDetails.subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Tax (10%)</span>
-                  <span>₹{orderDetails.tax.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between font-medium pt-2 border-t">
-                  <span>Total</span>
+                  <span className="text-gray-600">Total</span>
                   <span>₹{orderDetails.total.toFixed(2)}</span>
                 </div>
               </div>

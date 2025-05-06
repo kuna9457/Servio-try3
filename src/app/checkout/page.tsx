@@ -19,17 +19,31 @@ const CheckoutPage = () => {
     state: '',
     zipCode: '',
     scheduledDate: '',
-    scheduledTime: ''
+    scheduledTime: '19:00' // Default dinner time at 7 PM
   });
 
-  // Calculate minimum date (12 hours from now)
-  const minDate = format(addHours(new Date(), 12), 'yyyy-MM-dd');
+  // Calculate minimum date based on current time
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinutes = now.getMinutes();
   
-  // Generate time slots (8 AM to 9 PM)
-  const timeSlots = Array.from({ length: 14 }, (_, i) => {
-    const hour = i + 9; // 8 AM to 9 PM
-    return format(setHours(setMinutes(new Date(), 0), hour), 'HH:mm');
-  });
+  // If current time is past 3 PM, set minimum date to tomorrow
+  const minDate = currentHour >= 15 ? 
+    format(addDays(now, 1), 'yyyy-MM-dd') : 
+    format(now, 'yyyy-MM-dd');
+
+  // Function to check if a date is valid for booking
+  const isDateValidForBooking = (date: string) => {
+    const selectedDate = new Date(date);
+    const today = new Date();
+    
+    // If it's today and past 3 PM, return false
+    if (selectedDate.toDateString() === today.toDateString() && currentHour >= 15) {
+      return false;
+    }
+    
+    return true;
+  };
 
   useEffect(() => {
     // Get user details from localStorage
@@ -46,6 +60,13 @@ const CheckoutPage = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    
+    // If changing date, validate it
+    if (name === 'scheduledDate' && !isDateValidForBooking(value)) {
+      alert('Cannot book for today after 3 PM. Please select tomorrow or a later date.');
+      return;
+    }
+    
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -68,18 +89,22 @@ const CheckoutPage = () => {
         throw new Error('Please enter a valid 10-digit phone number');
       }
 
-      // Validate date and time selection
-      if (!formData.scheduledDate || !formData.scheduledTime) {
-        throw new Error('Please select both date and time for the service');
+      // Validate date selection
+      if (!formData.scheduledDate) {
+        throw new Error('Please select a date for the service');
       }
 
-      // Combine date and time
-      const scheduledDateTime = new Date(`${formData.scheduledDate}T${formData.scheduledTime}`);
-      const now = new Date();
-      const minDateTime = addHours(now, 12);
+      // Validate if the selected date is valid
+      if (!isDateValidForBooking(formData.scheduledDate)) {
+        throw new Error('Cannot book for today after 3 PM. Please select tomorrow or a later date.');
+      }
+
+      // Combine date and time (fixed at 7 PM)
+      const scheduledDateTime = new Date(`${formData.scheduledDate}T19:00`);
+      const minDateTime = addHours(now, 3);
 
       if (!isAfter(scheduledDateTime, minDateTime)) {
-        throw new Error('Service must be booked at least 12 hours in advance');
+        throw new Error('Service must be booked at least 3 hours in advance');
       }
 
       // Save customer details to localStorage
@@ -135,8 +160,7 @@ const CheckoutPage = () => {
   }
 
   const subtotal = getTotal();
-  const tax = subtotal * 0.1;
-  const total = subtotal + tax;
+  const total = subtotal;
 
   return (
     <ProtectedRoute>
@@ -251,76 +275,24 @@ const CheckoutPage = () => {
 
                   {/* Date and Time Selection */}
                   <div className="space-y-4">
-                    {/* <div className="bg-gray-50 p-4 rounded-lg"> */}
-                      {/* <h3 className="text-sm font-medium text-gray-700 mb-2">Selected Date & Time</h3> */}
-                      {/* <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className="text-lg font-semibold">
-                            {formData.scheduledDate ? format(new Date(formData.scheduledDate), 'MMM dd, yyyy') : 'No date selected'}
-                          </div>
-                          <div className="text-lg font-semibold text-primary">
-                            {formData.scheduledTime ? format(new Date(`2000-01-01T${formData.scheduledTime}`), 'h:mm a') : 'No time selected'}
-                          </div>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setFormData(prev => ({
-                              ...prev,
-                              scheduledDate: '',
-                              scheduledTime: ''
-                            }));
-                          }}
-                          className="text-sm text-red-500 hover:text-red-700"
-                        >
-                          Clear
-                        </button>
-                      </div> */}
-                    {/* </div> */}
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Select Date
-                        </label>
-                        <input
-                          type="date"
-                          name="scheduledDate"
-                          value={formData.scheduledDate}
-                          onChange={handleInputChange}
-                          min={minDate}
-                          required
-                          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
-                          Service must be booked at least 12 hours in advance
-                        </p>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Select Time
-                        </label>
-                        <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-2 border rounded-md">
-                          {timeSlots.map(time => (
-                            <button
-                              key={time}
-                              type="button"
-                              onClick={() => handleInputChange({ target: { name: 'scheduledTime', value: time } } as any)}
-                              className={`p-2 text-sm rounded-md transition-colors ${
-                                formData.scheduledTime === time
-                                  ? 'bg-primary text-white'
-                                  : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                              }`}
-                            >
-                              {format(new Date(`2000-01-01T${time}`), 'h:mm a')}
-                            </button>
-                          ))}
-                        </div>
-                        {!formData.scheduledTime && (
-                          <p className="text-xs text-red-500 mt-1">Please select a time slot</p>
-                        )}
-                      </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Booking Date
+                      </label>
+                      <input
+                        type="date"
+                        name="scheduledDate"
+                        value={formData.scheduledDate}
+                        onChange={handleInputChange}
+                        min={minDate}
+                        required
+                        className="w-60 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        {currentHour >= 15 ? 
+                          'Today\'s orders are closed. Please select tomorrow or a later date.' :
+                          'Dinner will be Delivered after 7:00 PM.'}
+                      </p>
                     </div>
                   </div>
                 </form>
@@ -346,10 +318,6 @@ const CheckoutPage = () => {
                   <span className="text-gray-600">Subtotal</span>
                   <span className="font-medium">₹{subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-base">
-                  <span className="text-gray-600">Tax (10%)</span>
-                  <span className="font-medium">₹{tax.toFixed(2)}</span>
-                </div>
                 <div className="flex justify-between text-lg font-semibold">
                   <span>Total</span>
                   <span>₹{total.toFixed(2)}</span>
@@ -363,36 +331,6 @@ const CheckoutPage = () => {
             >
               {isLoading ? 'Processing...' : 'Proceed to Payment'}
             </button>
-
-            {/* Selected Date & Time Summary */}
-            <div className="mt-6 border-t pt-4">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">Selected Date & Time</h3>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-2">
-                    <div className="text-base font-medium">
-                      {formData.scheduledDate ? format(new Date(formData.scheduledDate), 'MMM dd, yyyy') : 'No date selected'}
-                    </div>
-                    <div className="text-base font-medium text-primary">
-                      {formData.scheduledTime ? format(new Date(`2000-01-01T${formData.scheduledTime}`), 'h:mm a') : 'No time selected'}
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setFormData(prev => ({
-                        ...prev,
-                        scheduledDate: '',
-                        scheduledTime: ''
-                      }));
-                    }}
-                    className="text-sm text-red-500 hover:text-red-700"
-                  >
-                    Clear
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

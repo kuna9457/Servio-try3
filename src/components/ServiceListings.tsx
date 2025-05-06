@@ -52,7 +52,8 @@ const ServiceListings = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showAllFilters, setShowAllFilters] = useState(false);
-  const [selectedFoodCategory, setSelectedFoodCategory] = useState<string>('tiffin1');
+  const [selectedFoodCategory, setSelectedFoodCategory] = useState<string>('all');
+  const [foodType, setFoodType] = useState<string>('all');
 
   // Use our custom debounce hook
   const debouncedSearchQuery = useDebounce<string>(searchQuery, 300);
@@ -132,31 +133,31 @@ const ServiceListings = () => {
         
         if (!hasTiffinServices) {
           const tiffinServices: Service[] = [
-            {
-              _id: 'tiffin-1',
-              title: 'Customize Meal',
-              description: 'Create your own meal plan with customizable portions and items. Choose from our wide range of vegetarian dishes and set your preferred quantities.',
-              category: 'Tiffin Services',
-              price: 100,
-              location: selectedLocation,
-              availability: true,
-              image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-              provider: {
-                _id: 'Gourmet Delights',
-                name: 'Gourmet Delights',
-                location: selectedLocation
-              },
-              rating: 4.1,
-              reviews: 26,
-              popularity: 88,
-              createdAt: new Date().toISOString()
-            },
+            // {
+            //   _id: 'tiffin-1',
+            //   title: 'Customize Meal',
+            //   description: 'Create your own meal plan with customizable portions and items. Choose from our wide range of vegetarian dishes and set your preferred quantities.',
+            //   category: 'Tiffin Services',
+            //   price: 100,
+            //   location: selectedLocation,
+            //   availability: true,
+            //   image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+            //   provider: {
+            //     _id: 'Gourmet Delights',
+            //     name: 'Gourmet Delights',
+            //     location: selectedLocation
+            //   },
+            //   rating: 4.1,
+            //   reviews: 26,
+            //   popularity: 88,
+            //   createdAt: new Date().toISOString()
+            // },
             {
               _id: 'tiffin-2',
               title: 'Veg Tiffin',
               description: 'Daily fresh vegetarian meals including roti, sabzi, dal, rice, and salad. Customizable menu options available.',
               category: 'Tiffin Services',
-              price: 80,
+              price: 90,
               location: selectedLocation,
               availability: true,
               image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
@@ -175,7 +176,7 @@ const ServiceListings = () => {
               title: 'Non-Veg Tiffin',
               description: 'High-quality non-vegetarian meals with chicken/egg curry, rice, roti, and accompaniments. Weekly menu rotation.',
               category: 'Tiffin Services',
-              price: 100,
+              price: 130,
               location: selectedLocation,
               availability: true,
               image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
@@ -189,120 +190,139 @@ const ServiceListings = () => {
               popularity: 88,
               createdAt: new Date().toISOString()
             },
-            {
-              _id: 'tiffin-4',
-              title: 'Traditional Indian Homestyle Meals',
-              description: 'Authentic Indian home-cooked meals prepared with traditional recipes and fresh ingredients. Includes regional specialties and seasonal dishes.',
-              category: 'Tiffin Services',
-              price: 110,
-              location: selectedLocation,
-              availability: true,
-              image: 'https://images.unsplash.com/photo-1585937421612-70a0083564be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-              provider: {
-                _id: 'Spice of India',
-                name: 'Spice of India',
-                location: selectedLocation
-              },
-              rating: 4.2,
-              reviews: 24,
-              popularity: 82,
-              createdAt: new Date().toISOString()
-            },
-            {
-              _id: 'tiffin-5',
-              title: 'Baby & Toddler Meal Plans',
-              description: 'Nutritious and balanced meals specially designed for babies and toddlers. Includes purees, soft foods, and finger foods appropriate for different age groups.',
-              category: 'Tiffin Services',
-              price: 120,
-              location: selectedLocation,
-              availability: true,
-              image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-              provider: {
-                _id: 'Little Bites',
-                name: 'Little Bites',
-                location: selectedLocation
-              },
-              rating: 4.1,
-              reviews: 12,
-              popularity: 90,
-              createdAt: new Date().toISOString()
-            },
-            {
-              _id: 'tiffin-6',
-              title: 'Ayurvedic Meals',
-              description: 'Balanced meals prepared according to Ayurvedic principles. Customized based on your dosha type and health requirements.',
-              category: 'Tiffin Services',
-              price: 3800,
-              location: selectedLocation,
-              availability: true,
-              image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-              provider: {
-                _id: 'provider-tiffin-5',
-                name: 'AyurVeda Kitchen',
-                location: selectedLocation
-              },
-              rating: 4.8,
-              reviews: 92,
-              popularity: 85,
-              createdAt: new Date().toISOString()
-            },
-            {
-              _id: 'tiffin-7',
-              title: 'High-Protein Fitness Meals',
-              description: 'Protein-rich meals designed for fitness enthusiasts. Includes lean proteins, complex carbs, and healthy fats. Customizable based on your fitness goals.',
-              category: 'Tiffin Services',
-              price: 3500,
-              location: selectedLocation,
-              availability: true,
-              image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-              provider: {
-                _id: 'provider-tiffin-6',
-                name: 'FitFuel',
-                location: selectedLocation
-              },
-              rating: 4.9,
-              reviews: 108,
-              popularity: 92,
-              createdAt: new Date().toISOString()
-            },
-            {
-              _id: 'tiffin-8',
-              title: 'Desserts Add-on',
-              description: 'Daily dessert options to complement your meal plan. Includes traditional Indian sweets, healthy desserts, and seasonal specials.',
-              category: 'Tiffin Services',
-              price: 800,
-              location: selectedLocation,
-              availability: true,
-              image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-              provider: {
-                _id: 'provider-tiffin-7',
-                name: 'Sweet Delights',
-                location: selectedLocation
-              },
-              rating: 4.8,
-              reviews: 65,
-              popularity: 78,
-              createdAt: new Date().toISOString()
-            },
+            // {
+            //   _id: 'tiffin-4',
+            //   title: 'Traditional Indian Homestyle Meals',
+            //   description: 'Authentic Indian home-cooked meals prepared with traditional recipes and fresh ingredients. Includes regional specialties and seasonal dishes.',
+            //   category: 'Tiffin Services',
+            //   price: 110,
+            //   location: selectedLocation,
+            //   availability: true,
+            //   image: 'https://images.unsplash.com/photo-1585937421612-70a0083564be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+            //   provider: {
+            //     _id: 'Spice of India',
+            //     name: 'Spice of India',
+            //     location: selectedLocation
+            //   },
+            //   rating: 4.2,
+            //   reviews: 24,
+            //   popularity: 82,
+            //   createdAt: new Date().toISOString()
+            // },
+            // {
+            //   _id: 'tiffin-5',
+            //   title: 'Baby & Toddler Meal Plans',
+            //   description: 'Nutritious and balanced meals specially designed for babies and toddlers. Includes purees, soft foods, and finger foods appropriate for different age groups.',
+            //   category: 'Tiffin Services',
+            //   price: 120,
+            //   location: selectedLocation,
+            //   availability: true,
+            //   image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+            //   provider: {
+            //     _id: 'Little Bites',
+            //     name: 'Little Bites',
+            //     location: selectedLocation
+            //   },
+            //   rating: 4.1,
+            //   reviews: 12,
+            //   popularity: 90,
+            //   createdAt: new Date().toISOString()
+            // },
+            // {
+            //   _id: 'tiffin-6',
+            //   title: 'Ayurvedic Meals',
+            //   description: 'Balanced meals prepared according to Ayurvedic principles. Customized based on your dosha type and health requirements.',
+            //   category: 'Tiffin Services',
+            //   price: 3800,
+            //   location: selectedLocation,
+            //   availability: true,
+            //   image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+            //   provider: {
+            //     _id: 'provider-tiffin-5',
+            //     name: 'AyurVeda Kitchen',
+            //     location: selectedLocation
+            //   },
+            //   rating: 4.8,
+            //   reviews: 92,
+            //   popularity: 85,
+            //   createdAt: new Date().toISOString()
+            // },
+            // {
+            //   _id: 'tiffin-7',
+            //   title: 'High-Protein Fitness Meals',
+            //   description: 'Protein-rich meals designed for fitness enthusiasts. Includes lean proteins, complex carbs, and healthy fats. Customizable based on your fitness goals.',
+            //   category: 'Tiffin Services',
+            //   price: 3500,
+            //   location: selectedLocation,
+            //   availability: true,
+            //   image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+            //   provider: {
+            //     _id: 'provider-tiffin-6',
+            //     name: 'FitFuel',
+            //     location: selectedLocation
+            //   },
+            //   rating: 4.9,
+            //   reviews: 108,
+            //   popularity: 92,
+            //   createdAt: new Date().toISOString()
+            // },
+            // {
+            //   _id: 'tiffin-8',
+            //   title: 'Desserts Add-on',
+            //   description: 'Daily dessert options to complement your meal plan. Includes traditional Indian sweets, healthy desserts, and seasonal specials.',
+            //   category: 'Tiffin Services',
+            //   price: 800,
+            //   location: selectedLocation,
+            //   availability: true,
+            //   image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+            //   provider: {
+            //     _id: 'provider-tiffin-7',
+            //     name: 'Sweet Delights',
+            //     location: selectedLocation
+            //   },
+            //   rating: 4.8,
+            //   reviews: 65,
+            //   popularity: 78,
+            //   createdAt: new Date().toISOString()
+            // },
             {
               _id: 'tiffin-9',
-              title: 'Budget-Friendly Meal Plan',
-              description: 'Affordable daily meals with basic but nutritious food items. Perfect for students and working professionals.',
+              title: 'Roti/Chapati/Phulka',
+              description: 'Roti, Chapati, Phulka, and other bread options to accompany your meal.',
               category: 'Tiffin Services',
-              price: 1800,
+              price: 10,
               location: selectedLocation,
               availability: true,
               image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
               provider: {
                 _id: 'provider-tiffin-3',
-                name: 'Economy Meals',
+                name: 'Roti Rasoi',
                 location: selectedLocation
               },
-              rating: 4.5,
-              reviews: 76,
+              rating: 4.2,
+              reviews: 27,
               popularity: 82,
               createdAt: new Date().toISOString()
             }
+            // {
+            //   _id: 'tiffin-10',
+            //   title: 'Rice',
+            //   description: 'Rice, and other rice options to accompany your meal.',
+            //   category: 'Tiffin Services',
+            //   price: 10,
+            //   location: selectedLocation,
+            //   availability: true,
+            //   image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+            //   provider: {
+            //     _id: 'provider-tiffin-3',
+            //     name: 'Roti Rasoi',
+            //     location: selectedLocation
+            //   },
+            //   rating: 4.2,
+            //   reviews: 27,
+            //   popularity: 82,
+            //   createdAt: new Date().toISOString()
+            // }
           ];
           
           setServices([...filteredServices, ...tiffinServices]);
@@ -397,33 +417,37 @@ const ServiceListings = () => {
     { id: 'tiffin8', name: 'Maharastrian rasoi', image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80' },
   ];
 
-  // Filter services by food category (tiffin type)
-  const filterByFoodCategory = (service: Service) => {
-    if (selectedFoodCategory === 'all') return true;
+  // Food type options
+  const foodTypes = [
+    { id: 'all', name: 'All Types' },
+    { id: 'veg', name: 'Vegetarian' },
+    { id: 'non-veg', name: 'Non-Vegetarian' },
+    { id: 'egg', name: 'Egg' },
+    { id: 'special', name: 'Special' }
+  ];
+
+  // Filter services by food type
+  const filterByFoodType = (service: Service) => {
+    if (foodType === 'all') return true;
     
-    // Map each tiffin category to specific services
-    const tiffinMapping: {[key: string]: string[]} = {
-      'tiffin1': ['Customize Meal','Veg Tiffin', 'Non-Veg Tiffin'], // Punjabi Patiala
-      'tiffin2': ['Veg Tiffin', 'Customize Meal'], // Rotli Rasoi
-      'tiffin3': ['Non-Veg Tiffin', 'Customize Meal'], // Ghar Ka Bhojan
-      'tiffin4': ['Veg Tiffin', 'Monthly Veg Thali','Customize Meal'], // Bhog Bhoj
-      'tiffin5': ['Customize Meal'], // Desi Dabba
-      'tiffin6': ['Non-Veg Tiffin', 'Non-Veg Tiffin','Customize Meal'], // Tandoori Tiffins
-      'tiffin7': ['Customize Meal','Ayurvedic Meals'], // Food Station
-      'tiffin8': ['Veg Tiffin','Customize Meal','Non-Veg Tiffin'] // Maharastrian rasoi
+    // Map service titles to food types
+    const foodTypeMapping: {[key: string]: string[]} = {
+      'veg': ['Veg Tiffin', 'Vegetarian', 'Veg'],
+      'non-veg': ['Non-Veg Tiffin', 'Non-Vegetarian', 'Non-Veg', 'Chicken'],
+      'egg': ['Egg', 'Egg Curry'],
+      'special': ['Special', 'Customize Meal', 'Ayurvedic', 'Fitness']
     };
     
-    // Check if the service title contains any of the mapped tiffin names
-    const mappedTitles = tiffinMapping[selectedFoodCategory] || [];
-    return mappedTitles.some(title => service.title.includes(title));
+    const mappedTypes = foodTypeMapping[foodType] || [];
+    return mappedTypes.some(type => service.title.toLowerCase().includes(type.toLowerCase()));
   };
 
-  // Update the finalFilteredServices to include food category filter
+  // Update the finalFilteredServices to include food type filter
   const finalFilteredServices = filteredAndSortedServices
     .filter(filterByLocation)
     .filter(filterByPriceRange)
     .filter(filterByRating)
-    .filter(filterByFoodCategory);
+    .filter(filterByFoodType);
 
   const displayedServices = finalFilteredServices.slice(0, displayCount);
 
@@ -541,7 +565,7 @@ const ServiceListings = () => {
   // Reset selectedFoodCategory when location changes only
   useEffect(() => {
     if (selectedLocation) {
-      setSelectedFoodCategory('tiffin1');
+      setSelectedFoodCategory('all');
     }
   }, [selectedLocation]);
 
@@ -636,12 +660,12 @@ const ServiceListings = () => {
           showAllFilters ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-gray-100">
-          {/* Sort Dropdown */}
+            {/* Sort Dropdown */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Sort By</label>
-          <div className="relative">
-            <select
-              value={sortBy}
+              <div className="relative">
+                <select
+                  value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortOption)}
                   className="w-full px-3 sm:px-4 py-2 border border-gray-200 rounded-lg appearance-none focus:ring-2 focus:ring-[#003B95] focus:border-transparent text-sm bg-gray-50"
                 >
@@ -650,63 +674,87 @@ const ServiceListings = () => {
                   <option value="price-desc">Price: High to Low</option>
                   <option value="rating-desc">Highest Rated</option>
                   <option value="rating-asc">Lowest Rated</option>
-            </select>
-            <svg
-              className="w-5 h-5 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+                </select>
+                <svg
+                  className="w-5 h-5 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+                </svg>
               </div>
-          </div>
+            </div>
 
-          {/* Price Range Filter */}
+            {/* Food Type Filter */}
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Food Type</label>
+              <div className="relative">
+                <select
+                  value={foodType}
+                  onChange={(e) => setFoodType(e.target.value)}
+                  className="w-full px-3 sm:px-4 py-2 border border-gray-200 rounded-lg appearance-none focus:ring-2 focus:ring-[#003B95] focus:border-transparent text-sm bg-gray-50"
+                >
+                  {foodTypes.map(type => (
+                    <option key={type.id} value={type.id}>{type.name}</option>
+                  ))}
+                </select>
+                <svg
+                  className="w-5 h-5 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Price Range Filter */}
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Price Range</label>
-          <div className="relative">
-            <select
-              value={priceRange}
-              onChange={(e) => setPriceRange(e.target.value)}
+              <div className="relative">
+                <select
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(e.target.value)}
                   className="w-full px-3 sm:px-4 py-2 border border-gray-200 rounded-lg appearance-none focus:ring-2 focus:ring-[#003B95] focus:border-transparent text-sm bg-gray-50"
-            >
-              <option value="">All Prices</option>
-              <option value="0-50">₹0 - ₹50</option>
-              <option value="51-100">₹51 - ₹100</option>
-              <option value="101-200">₹101 - ₹200</option>
-              <option value="201+">₹201+</option>
-            </select>
-            <svg
-              className="w-5 h-5 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+                >
+                  <option value="">All Prices</option>
+                  <option value="0-50">₹0 - ₹50</option>
+                  <option value="51-100">₹51 - ₹100</option>
+                  <option value="101-200">₹101 - ₹200</option>
+                  <option value="201+">₹201+</option>
+                </select>
+                <svg
+                  className="w-5 h-5 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </div>
-        </div>
+                </svg>
+              </div>
+            </div>
 
-        {/* Rating Filter */}
+            {/* Rating Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Minimum Rating</label>
               <div className="flex flex-wrap items-center gap-2">
-            {[0, 1, 2, 3, 4, 5].map((rating) => (
-              <button
-                key={rating}
-                onClick={() => setMinRating(rating)}
+                {[0, 1, 2, 3, 4, 5].map((rating) => (
+                  <button
+                    key={rating}
+                    onClick={() => setMinRating(rating)}
                     className={`px-4 py-2 rounded-full text-sm transition-all duration-200 ${
-                  minRating === rating
-                    ? 'bg-[#003B95] text-white shadow-sm'
-                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                {rating}+
-              </button>
-            ))}
-          </div>
-        </div>
+                      minRating === rating
+                        ? 'bg-[#003B95] text-white shadow-sm'
+                        : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    {rating}+
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -718,42 +766,6 @@ const ServiceListings = () => {
 
       {/* Location message */}
       {renderLocationMessage()}
-
-      {/* Food Category Horizontal Menu - Only show for All or Tiffin Services */}
-      {(selectedCategory === 'All' || selectedCategory === 'Tiffin Services') && (
-        <div className="mb-8 bg-white rounded-xl shadow-sm border border-gray-100 p-4 overflow-x-auto no-scrollbar">
-          <h3 className="text-lg font-semibold text-[#003B95] mb-4 px-1">Select Tiffin Type</h3>
-          <div className="flex space-x-6 pb-2 px-1 min-w-max">
-            {foodCategories.map((category) => (
-              <div 
-                key={category.id}
-                onClick={() => setSelectedFoodCategory(category.id)}
-                className="flex flex-col items-center cursor-pointer group"
-              >
-                <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden transition-all duration-300 ${
-                  selectedFoodCategory === category.id 
-                    ? 'ring-2 ring-[#003B95] transform scale-105 shadow-sm' 
-                    : 'ring-1 ring-gray-200 group-hover:ring-gray-300'
-                }`}>
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={category.image}
-                      alt={category.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-                <span className={`mt-2 text-xs sm:text-sm font-medium transition-colors duration-300 ${
-                  selectedFoodCategory === category.id ? 'text-[#003B95]' : 'text-gray-600 group-hover:text-gray-900'
-                }`}>
-                  {category.name}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Services Grid */}
       {selectedCategory === 'All' ? (
@@ -773,36 +785,36 @@ const ServiceListings = () => {
                 {/* Services Grid for this Category */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {/* Apply food category filter if it's Tiffin Services */}
-                  {(category === 'Tiffin Services' ? filteredServices.filter(filterByFoodCategory) : filteredServices).map((service) => (
+                  {(category === 'Tiffin Services' ? filteredServices.filter(filterByFoodType) : filteredServices).map((service) => (
           <div
             key={service._id}
             onClick={() => handleServiceClick(service)}
             className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-200 cursor-pointer"
           >
                       <div className="relative h-48 sm:h-52">
-              <Image
-                src={service.image}
-                alt={service.title}
-                fill
-                className="object-cover"
-              />
-            </div>
+                <Image
+                  src={service.image}
+                  alt={service.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
                       <div className="p-4 sm:p-5">
                         <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{service.title}</h3>
                         <p className="text-sm text-gray-600 mb-3 sm:mb-4 line-clamp-2">{service.description}</p>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center">
-                            <span className="text-[#003B95] font-semibold text-base sm:text-lg">₹{service.price}</span>
-                            <span className="text-gray-500 text-xs sm:text-sm ml-1 sm:ml-2">/Person</span>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                              <span className="text-[#003B95] font-semibold text-base sm:text-lg">₹{service.price}</span>
+                              <span className="text-gray-500 text-xs sm:text-sm ml-1 sm:ml-2">/Person</span>
+                  </div>
+                  <div className="flex items-center">
+                    <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.363 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.363-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                              <span className="text-gray-600 text-xs sm:text-sm ml-1">{service.rating}</span>
+                              <span className="text-gray-500 text-xs sm:text-sm ml-1">({service.reviews})</span>
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.363 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.363-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                            <span className="text-gray-600 text-xs sm:text-sm ml-1">{service.rating}</span>
-                            <span className="text-gray-500 text-xs sm:text-sm ml-1">({service.reviews})</span>
-                </div>
-              </div>
                         <div className="mt-3 sm:mt-4 flex justify-between items-center">
                           <span className="text-gray-500 text-xs sm:text-sm">{service.location}</span>
                 {renderCartButton(service)}
@@ -819,7 +831,7 @@ const ServiceListings = () => {
         // Render single category view
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 px-1 sm:px-0">
           {/* Apply food category filter if it's Tiffin Services */}
-          {(selectedCategory === 'Tiffin Services' ? finalFilteredServices.filter(filterByFoodCategory) : finalFilteredServices).map((service) => (
+          {(selectedCategory === 'Tiffin Services' ? finalFilteredServices.filter(filterByFoodType) : finalFilteredServices).map((service) => (
             <div
               key={service._id}
               onClick={() => handleServiceClick(service)}
