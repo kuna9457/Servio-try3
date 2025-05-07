@@ -30,21 +30,43 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Load cart from localStorage on initial render
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      setItems(JSON.parse(savedCart));
+    try {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        const parsedCart = JSON.parse(savedCart);
+        if (Array.isArray(parsedCart)) {
+          setItems(parsedCart);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading cart:', error);
+      localStorage.removeItem('cart');
+    } finally {
+      setIsInitialized(true);
     }
   }, []);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(items));
-  }, [items]);
+    if (isInitialized) {
+      try {
+        localStorage.setItem('cart', JSON.stringify(items));
+      } catch (error) {
+        console.error('Error saving cart:', error);
+      }
+    }
+  }, [items, isInitialized]);
 
   const addToCart = (service: any) => {
+    if (!service || !service._id) {
+      console.error('Invalid service:', service);
+      return;
+    }
+
     setItems(prevItems => {
       const existingItem = prevItems.find(item => item.service._id === service._id);
       if (existingItem) {
@@ -59,10 +81,20 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const removeFromCart = (serviceId: string) => {
+    if (!serviceId) {
+      console.error('Invalid serviceId:', serviceId);
+      return;
+    }
+
     setItems(prevItems => prevItems.filter(item => item.service._id !== serviceId));
   };
 
   const updateQuantity = (serviceId: string, quantity: number) => {
+    if (!serviceId || quantity < 0) {
+      console.error('Invalid serviceId or quantity:', { serviceId, quantity });
+      return;
+    }
+
     setItems(prevItems =>
       prevItems.map(item =>
         item.service._id === serviceId ? { ...item, quantity } : item
@@ -71,6 +103,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const getCartCount = (serviceId: string) => {
+    if (!serviceId) {
+      console.error('Invalid serviceId:', serviceId);
+      return 0;
+    }
+
     const item = items.find(item => item.service._id === serviceId);
     return item ? item.quantity : 0;
   };
@@ -81,8 +118,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const clearCart = () => {
     setItems([]);
-    localStorage.removeItem('cart');
+    try {
+      localStorage.removeItem('cart');
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+    }
   };
+
+  // Don't render children until cart is initialized
+  if (!isInitialized) {
+    return null;
+  }
 
   return (
     <CartContext.Provider

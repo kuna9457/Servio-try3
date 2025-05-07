@@ -45,6 +45,13 @@ const CheckoutPage = () => {
     return true;
   };
 
+  // Redirect to services if cart is empty
+  useEffect(() => {
+    if (items.length === 0) {
+      router.push('/services');
+    }
+  }, [items, router]);
+
   useEffect(() => {
     // Get user details from localStorage
     const userData = JSON.parse(localStorage.getItem('user') || '{}');
@@ -143,17 +150,12 @@ const CheckoutPage = () => {
     }
   };
 
+  // If items is empty, show loading state instead of redirecting immediately
   if (items.length === 0) {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
-          <button
-            onClick={() => router.push('/services')}
-            className="bg-primary text-white px-6 py-2 rounded-md hover:bg-primary-dark transition-colors"
-          >
-            Browse Services
-          </button>
+          <h1 className="text-2xl font-bold mb-4">Loading...</h1>
         </div>
       </div>
     );

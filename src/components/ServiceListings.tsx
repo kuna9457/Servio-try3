@@ -154,7 +154,7 @@ const ServiceListings = () => {
             // },
             {
               _id: 'tiffin-2',
-              title: 'Veg Tiffin',
+              title: 'Veg Tiffin (Dinner)',
               description: 'Daily fresh vegetarian meals including roti, sabzi, dal, rice, and salad. Customizable menu options available.',
               category: 'Tiffin Services',
               price: 90,
@@ -173,7 +173,7 @@ const ServiceListings = () => {
             },
             {
               _id: 'tiffin-3',
-              title: 'Non-Veg Tiffin',
+              title: 'Non-Veg Tiffin (Dinner)',
               description: 'High-quality non-vegetarian meals with chicken/egg curry, rice, roti, and accompaniments. Weekly menu rotation.',
               category: 'Tiffin Services',
               price: 130,
@@ -287,13 +287,13 @@ const ServiceListings = () => {
             // },
             {
               _id: 'tiffin-9',
-              title: 'Roti/Chapati/Phulka',
+              title: 'Extra Roti/Chapati/Phulka',
               description: 'Roti, Chapati, Phulka, and other bread options to accompany your meal.',
               category: 'Tiffin Services',
               price: 10,
               location: selectedLocation,
               availability: true,
-              image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+              image: '/roti.jpg',
               provider: {
                 _id: 'provider-tiffin-3',
                 name: 'Roti Rasoi',
@@ -422,8 +422,7 @@ const ServiceListings = () => {
     { id: 'all', name: 'All Types' },
     { id: 'veg', name: 'Vegetarian' },
     { id: 'non-veg', name: 'Non-Vegetarian' },
-    { id: 'egg', name: 'Egg' },
-    { id: 'special', name: 'Special' }
+    { id: 'roti', name: 'Roti' }
   ];
 
   // Filter services by food type
@@ -434,11 +433,20 @@ const ServiceListings = () => {
     const foodTypeMapping: {[key: string]: string[]} = {
       'veg': ['Veg Tiffin', 'Vegetarian', 'Veg'],
       'non-veg': ['Non-Veg Tiffin', 'Non-Vegetarian', 'Non-Veg', 'Chicken'],
-      'egg': ['Egg', 'Egg Curry'],
-      'special': ['Special', 'Customize Meal', 'Ayurvedic', 'Fitness']
+      'roti': ['Roti', 'Chapati', 'Phulka', 'Extra Roti']
     };
     
     const mappedTypes = foodTypeMapping[foodType] || [];
+    
+    // Special handling for vegetarian filter to exclude non-veg items
+    if (foodType === 'veg') {
+      const nonVegKeywords = ['Non-Veg', 'Non-Vegetarian', 'Chicken', 'Egg'];
+      const hasNonVegKeyword = nonVegKeywords.some(keyword => 
+        service.title.toLowerCase().includes(keyword.toLowerCase())
+      );
+      if (hasNonVegKeyword) return false;
+    }
+    
     return mappedTypes.some(type => service.title.toLowerCase().includes(type.toLowerCase()));
   };
 
