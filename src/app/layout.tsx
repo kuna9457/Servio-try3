@@ -10,6 +10,8 @@ import { CheckoutProvider } from '../context/CheckoutContext';
 import { RouteProtectionProvider } from '../context/RouteProtectionContext';
 import Navbar from '../components/Navbar';
 import Footer from '@/components/Footer';
+import { GA_MEASUREMENT_ID } from '../config/analytics';
+import GoogleAnalytics from '../components/GoogleAnalytics';
 
 const outfit = Outfit({ 
   subsets: ["latin"],
@@ -23,6 +25,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <GoogleAnalytics measurementId={GA_MEASUREMENT_ID} />
+      </head>
       <body className={`${outfit.variable} font-sans`}>
         <UserProvider>
           <LocationProvider>
