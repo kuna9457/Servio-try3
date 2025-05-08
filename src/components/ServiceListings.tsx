@@ -8,6 +8,9 @@ import { useLocation } from '@/context/LocationContext';
 import { Service } from '@/types/service';
 import { servicesAPI } from '../services/api';
 import SearchBar from './search/SearchBar';
+import { trackSearch, trackAddToCart, trackRemoveFromCart, trackViewItem, trackFilterApplied, trackLocationChanged } from '../utils/analytics';
+import GoogleAnalytics from './GoogleAnalytics';
+import { GA_MEASUREMENT_ID } from '../config/analytics';
 
 type SortOption = 'price-asc' | 'price-desc' | 'rating-desc' | 'rating-asc' | 'newest';
 
@@ -61,6 +64,11 @@ const ServiceListings = () => {
   // Update search query and generate suggestions
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
+    
+    // Track search event
+    if (value.length > 1) {
+      trackSearch(value);
+    }
     
     // Generate suggestions based on current input
     if (value.length > 1) {
@@ -472,9 +480,24 @@ const ServiceListings = () => {
 
   const handleAddToCart = (service: Service) => {
     addToCart(transformServiceForCart(service));
+    trackAddToCart({
+      id: service._id,
+      name: service.title,
+      category: service.category,
+      price: service.price
+    });
   };
 
   const handleRemoveFromCart = (serviceId: string) => {
+    const service = services.find(s => s._id === serviceId);
+    if (service) {
+      trackRemoveFromCart({
+        id: service._id,
+        name: service.title,
+        category: service.category,
+        price: service.price
+      });
+    }
     removeFromCart(serviceId);
   };
 
@@ -489,6 +512,12 @@ const ServiceListings = () => {
   const handleServiceClick = (service: Service) => {
     setSelectedService(service);
     setIsModalOpen(true);
+    trackViewItem({
+      id: service._id,
+      name: service.title,
+      category: service.category,
+      price: service.price
+    });
   };
 
   const renderCartButton = (service: Service) => {
@@ -577,6 +606,31 @@ const ServiceListings = () => {
     }
   }, [selectedLocation]);
 
+  // Add tracking for filter changes
+  useEffect(() => {
+    if (foodType !== 'all') {
+      trackFilterApplied('food_type', foodType);
+    }
+  }, [foodType]);
+
+  useEffect(() => {
+    if (priceRange) {
+      trackFilterApplied('price_range', priceRange);
+    }
+  }, [priceRange]);
+
+  useEffect(() => {
+    if (minRating > 0) {
+      trackFilterApplied('rating', minRating.toString());
+    }
+  }, [minRating]);
+
+  useEffect(() => {
+    if (selectedLocation) {
+      trackLocationChanged(selectedLocation);
+    }
+  }, [selectedLocation]);
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -599,6 +653,9 @@ const ServiceListings = () => {
 
   return (
     <div className="container mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+      {/* Add Google Analytics Component */}
+      <GoogleAnalytics measurementId={GA_MEASUREMENT_ID} />
+
       {/* Page Title */}
       <h1 className="text-2xl sm:text-3xl font-bold text-[#003B95] mb-4 sm:mb-8 px-1">Our Services</h1>
 

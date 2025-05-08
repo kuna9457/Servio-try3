@@ -105,8 +105,9 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose, o
   // Tiffin service menu data
   const tiffinMenu = {
     veg: [
-      { name: 'Roti', item: '3 pieces', price: 30, sabzi: 1 },
+      { name: 'Sabzi', item: '1 bowl', price: 40, sabzi: 1 },
       { name: 'Dal', item: '1 bowl', price: 40, sabzi: 1 },
+      { name: 'Roti', item: '3 pieces', price: 30, sabzi: 1 },
       { name: 'Rice', item: '1 bowl', price: 30, sabzi: 1 },
       { name: 'Pickles', item: '2 types', price: 10, sabzi: 1 },
     ],
